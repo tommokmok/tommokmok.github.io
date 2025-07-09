@@ -116,6 +116,16 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
@@ -144,6 +154,94 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/08/Hexo-Blog-finetune-2025/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small projects, small steps to sucess">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/08/Hexo-Blog-finetune-2025/" class="post-title-link" itemprop="url">Hexo Blog finetune 2025</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-08 16:53:27" itemprop="dateCreated datePublished" datetime="2025-07-08T16:53:27+08:00">2025-07-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-09 10:38:11" itemprop="dateModified" datetime="2025-07-09T10:38:11+08:00">2025-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebDev/" itemprop="url" rel="index"><span itemprop="name">WebDev</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Add-the-tags-and-categories-page"><a href="#Add-the-tags-and-categories-page" class="headerlink" title="Add the tags and categories page"></a>Add the tags and categories page</h1><p>You need to use below command to generate the web page for the tags and categories. Otherwise, it will show nothing on the tags and categories page.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Update-the-scafflods"><a href="#Update-the-scafflods" class="headerlink" title="Update the scafflods"></a>Update the <code>scafflods</code></h1><p>Update the <code>post.md</code> in <code>scafflods</code> folder and add tags and ctegorees for each blog when using the <code>hexo new</code> command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line"><span class="built_in">date</span>: &#123;&#123; <span class="built_in">date</span> &#125;&#125;</span><br><span class="line">categories: &#123;&#123; categories &#125;&#125;</span><br><span class="line">tags: &#123;&#123; tags &#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="More-tags-in-each-blog"><a href="#More-tags-in-each-blog" class="headerlink" title="More tags in each blog"></a>More tags in each blog</h1><p>If you want to have more tags in one blog, please using below convention in the blog.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">tags: </span><br><span class="line">- hexo</span><br><span class="line">- blog</span><br></pre></td></tr></table></figure>
+
+<h1 id="Conculsion"><a href="#Conculsion" class="headerlink" title="Conculsion"></a>Conculsion</h1><p>I am re-do sometings that someone or many orders that have done many years ago.<br>Maybe it is too late to start a my own technical blog.</p>
+<p>Base on my observation, many blogs that use Hexo + Next theme are not maintance after 2019…</p>
+<p>So far, the should should fully functional with minimal features. </p>
+<p>Next, I will adding more contents.</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>Blogs for 4 years ago<br><a target="_blank" rel="noopener" href="https://op30132.github.io/2019/12/24/hexo-tag-page/">https://op30132.github.io/2019/12/24/hexo-tag-page/</a><br><a target="_blank" rel="noopener" href="https://kemushi54.github.io/">https://kemushi54.github.io/</a></p>
+<p>Super good reference for hexo blog from zero. If I follow this, then I can save lots of time.<br><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20139218/ironman/3910?page=1">https://ithelp.ithome.com.tw/users/20139218/ironman/3910?page=1</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -505,16 +603,32 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
-      <div class="site-state-item site-state-tags">
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">tags</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tommokmok" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tommokmok" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tommok@gmail.com" title="E-Mail → mailto:tommok@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 
