@@ -158,6 +158,202 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small projects, small steps to sucess">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/" class="post-title-link" itemprop="url">ESP32-S3 lvgl: YetAnotherSketchpad 2025</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-16 10:46:26" itemprop="dateCreated datePublished" datetime="2025-07-16T10:46:26+08:00">2025-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-22 13:05:08" itemprop="dateModified" datetime="2025-07-22T13:05:08+08:00">2025-07-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/EmbeddedProject/" itemprop="url" rel="index"><span itemprop="name">EmbeddedProject</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ESP32-S3-Yet-Another-Sketchpad"><a href="#ESP32-S3-Yet-Another-Sketchpad" class="headerlink" title="ESP32-S3 Yet Another Sketchpad"></a>ESP32-S3 Yet Another Sketchpad</h1><p>A demo project for ESP32-S3 using LVGL to implement a sketchpad on a 320 x 240 TFT display.</p>
+<p>This is a sibling project to <a target="_blank" rel="noopener" href="https://github.com/tommokmok/esp32s3_YetAnotherStockPricceTracker">YetAnotherStockPriceTracker</a> and uses the same hardware.</p>
+<p>Almost 90% of the code is referenced from <a target="_blank" rel="noopener" href="https://github.com/100askTeam/lv_lib_100ask/tree/master/src/lv_100ask_sketchpad">lv_100ask_sketchpad</a>, but updated for LVGL v9.2.2 and fixed for compatibility with ESP32-S3.</p>
+<h2 id="Project-Core-Values"><a href="#Project-Core-Values" class="headerlink" title="Project Core Values"></a>Project Core Values</h2><ul>
+<li>For learning purposes.</li>
+<li>The implementation is kept simple and straightforward.</li>
+<li>No fancy stuff,  make it work.</li>
+</ul>
+<h2 id="How-This-Project-May-Help-You"><a href="#How-This-Project-May-Help-You" class="headerlink" title="How This Project May Help You"></a>How This Project May Help You</h2><ul>
+<li><p>If you want LVGL to use external PSRAM for large buffers, add the following to your <code>platformio.ini</code>. This lets LVGL use the standard C memory allocation API. When the allocated memory size is &gt;4k, it will automatically use external PSRAM by default. This works with LVGL v9.2.2 and PlatformIO ESP32 Arduino framework (v2.0.5?).</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-D <span class="string">&#x27;LV_USE_STDLIB_MALLOC=LV_STDLIB_CLIB&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Espressif and PlatformIO are no longer collaborating, so PlatformIO does not support ESP32 Arduino framework versions &gt;v2.0.xx. If you want to use the latest ESP32 Arduino framework (&gt;v3), please use the Arduino IDE or the PIO Arduino VS Code extension.</p>
+<blockquote>
+<p>Reference: <a target="_blank" rel="noopener" href="https://community.platformio.org/t/using-esp-idf-v5-x-with-arduino-on-esp32s3/45597">Using ESP-IDF v5.x with Arduino on ESP32S3</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Screenshots-Demo"><a href="#Screenshots-Demo" class="headerlink" title="Screenshots &amp; Demo"></a>Screenshots &amp; Demo</h2><p><a target="_blank" rel="noopener" href="https://ibb.co/LXDT5wT2"><img src="https://i.ibb.co/LXDT5wT2/sketchpad.gif" alt="sketchpad" border="0"></a></p>
+<h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul>
+<li>Simple sketchpad to draw on the screen</li>
+<li>Button to clear the screen</li>
+<li>Button to change the line width</li>
+</ul>
+<h2 id="Development-Timeline"><a href="#Development-Timeline" class="headerlink" title="Development Timeline"></a>Development Timeline</h2><table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Milestone&#x2F;Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025-07-16</td>
+<td>Project started</td>
+</tr>
+<tr>
+<td>2025-07-21</td>
+<td>v1 release</td>
+</tr>
+</tbody></table>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h3><ul>
+<li>VS Code with the <a target="_blank" rel="noopener" href="https://platformio.org/">PlatformIO</a> extension</li>
+<li>ESP32-S3 board + 2.8” TFT LCD<ul>
+<li>Hardware purchased from Taobao. More info: <a target="_blank" rel="noopener" href="http://wiki.waaax.cn/boards/ESP32/ESP32-LVGL%E5%BC%80%E5%8F%91%E6%9D%BF.html">ESP32-LVGL开发板</a><blockquote>
+<p><strong>Note:</strong> This dev board is not recommended due to hardware issues. It may reset automatically, especially when connected to a PC.</p>
+</blockquote>
+</li>
+<li>ESP32-S3-N8R8</li>
+<li>LCD Driver: ST7989, 320 x 240 pixels</li>
+<li>Touch Driver: XPT2046</li>
+</ul>
+</li>
+</ul>
+<h3 id="Building-Flashing"><a href="#Building-Flashing" class="headerlink" title="Building &amp; Flashing"></a>Building &amp; Flashing</h3><ol>
+<li><p>Clone this repository:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/tommokmok/esp32s3_YetAnotherSketchpad</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Open the project in PlatformIO (VS Code).</p>
+</li>
+<li><p>Build and upload to your ESP32-S3 board.</p>
+</li>
+</ol>
+<h2 id="File-Structure"><a href="#File-Structure" class="headerlink" title="File Structure"></a>File Structure</h2><p>All libraries are placed in the local <code>lib/</code> directory for convenience.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>No need to download libraries from the web when opening the project for the first time.</li>
+<li>You can modify the source if you need specific functions.</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Larger repository size.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">esp32s3_YetAnotherSketchpad/</span><br><span class="line"></span><br><span class="line">├── lib/                            # External and user libraries</span><br><span class="line">│   ├── lvgl/                       # LVGL graphics library (if added locally)</span><br><span class="line">│   ├── LovyanGFX/                  # LovyanGFX display library (if added locally)</span><br><span class="line">│   ├── hal/                        # Hardware Abstraction Layer (display, touch, etc.)</span><br><span class="line">│   ├── appController/              # Application controller logic (state management, UI flow)</span><br><span class="line">│   └── sketchpad/                  # Sketchpad implementation (drawing logic, UI components)</span><br><span class="line">├── src/                            # Source code</span><br><span class="line">│   ├── main.cpp                    # Main application entry point</span><br><span class="line">│   └── ...                         # Other source files</span><br><span class="line">├── platformio.ini                  # PlatformIO project configuration</span><br><span class="line">├── README.md                       # This documentation</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>lib&#x2F;lvgl&#x2F;</strong>: LVGL graphics library (added locally).</li>
+<li><strong>lib&#x2F;LovyanGFX&#x2F;</strong>: LovyanGFX display library (added locally).</li>
+<li><strong>lib&#x2F;hal&#x2F;</strong>: Hardware Abstraction Layer for display, touch, and other peripherals.</li>
+<li><strong>lib&#x2F;appController&#x2F;</strong>: Application controller logic, such as state management and UI flow.</li>
+<li><strong>lib&#x2F;sketchpad&#x2F;</strong>: Sketchpad UI implementation.</li>
+<li><strong>src&#x2F;main.cpp</strong>: Main application logic, including LVGL initialization and sketchpad setup.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> If you install libraries via the PlatformIO Library Manager, they will be managed automatically. If you add libraries manually, place them in the <code>lib/</code> directory as shown above.</p>
+</blockquote>
+<h2 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h2><h3 id="1-Porting-from-100ask-code"><a href="#1-Porting-from-100ask-code" class="headerlink" title="1. Porting from 100ask code"></a>1. Porting from 100ask code</h3><p>The original source code is available at: <a target="_blank" rel="noopener" href="https://github.com/100askTeam/lv_lib_100ask/tree/master/src/lv_100ask_sketchpad">https://github.com/100askTeam/lv_lib_100ask/tree/master/src/lv_100ask_sketchpad</a>.</p>
+<p>The main tasks were porting the code to the current hardware and updating it for LVGL v9.2.2.</p>
+<blockquote>
+<p>Note: LVGL v9.1 does not work for this example, nothing will be shown on the canvas.</p>
+</blockquote>
+<h4 id="Issues-while-porting-to-the-ESP32-S3-dev-board"><a href="#Issues-while-porting-to-the-ESP32-S3-dev-board" class="headerlink" title="Issues while porting to the ESP32-S3 dev board"></a>Issues while porting to the ESP32-S3 dev board</h4><ul>
+<li><p><code style="color : red">&quot;error: field &#39;img&#39; has incomplete type&quot;</code></p>
+<ul>
+<li>This occurs because the compiler can’t find some <code>struct</code> definitions.</li>
+<li>Solution: Add the following include for internal definitions, especially if you are customizing widgets:  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;lvgl/src/lvgl_private.h&quot;</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code style="color : red">No colorwheel in lvgl &gt;v9.0</code></p>
+<ul>
+<li>The colorwheel widget was removed in LVGL v9.0 and above. Disable related functions.</li>
+<li>See: <a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl/issues/4429#issuecomment-2051520229">https://github.com/lvgl/lvgl/issues/4429#issuecomment-2051520229</a></li>
+</ul>
+</li>
+<li><p><code style="color : red">&#39;dram0_0_seg&#39; overflowed</code></p>
+<ul>
+<li><p>The sketchpad needs a canvas object and buffer, which requires 240x320x2 bytes.</p>
+</li>
+<li><p>PlatformIO uses ESP-IDF v4.4 by default, which lacks some PSRAM features.</p>
+</li>
+<li><p>Add the following definition in <code>platformio.ini</code> to use standard C <code>malloc</code> for memory allocation. When the allocation is &gt;1k, it will use external RAM by default:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-D <span class="string">&#x27;LV_USE_STDLIB_MALLOC=LV_STDLIB_CLIB&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Default SDK config location on Windows:</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The default sdkconfig location in Windows</span></span><br><span class="line">%homepath%\.platformio\packages\framework-arduinoespressif32\tools\sdk\esp32s3</span><br><span class="line"></span><br><span class="line"><span class="comment">// Default PSRAM usage definitions</span></span><br><span class="line">CONFIG_SPIRAM_USE_MALLOC=y</span><br><span class="line">CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=<span class="number">4096</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Customization"><a href="#Customization" class="headerlink" title="Customization"></a>Customization</h2><p>If you have different LCD or touch hardware, update the <code>lvgl</code> and <code>LovyanGFX</code> configurations accordingly.</p>
+<ul>
+<li>For LVGL, add configuration options in <code>platformio.ini</code>.</li>
+<li>For LovyanGFX, edit <code>include/custom_disp.hpp</code>.</li>
+</ul>
+<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>MIT</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/08/Hexo-Blog-finetune-2025/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -493,10 +689,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-07-04 13:16:14 / Modified: 11:29:10" itemprop="dateCreated datePublished" datetime="2025-07-04T13:16:14+08:00">2025-07-04</time>
+              <time title="Created: 2025-07-04 13:16:14" itemprop="dateCreated datePublished" datetime="2025-07-04T13:16:14+08:00">2025-07-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-16 10:47:17" itemprop="dateModified" datetime="2025-07-16T10:47:17+08:00">2025-07-16</time>
+              </span>
 
           
 
@@ -513,6 +715,9 @@
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Write-new-post"><a href="#Write-new-post" class="headerlink" title="Write new post"></a>Write new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
@@ -603,20 +808,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
