@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"tommokmok.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Small projects, small steps to sucess">
+  <meta name="description" content="Small project, small step to success">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Embedded Projects">
 <meta property="og:url" content="https://tommokmok.github.io/index.html">
 <meta property="og:site_name" content="Embedded Projects">
-<meta property="og:description" content="Small projects, small steps to sucess">
+<meta property="og:description" content="Small project, small step to success">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="tommok">
 <meta name="twitter:card" content="summary">
@@ -158,12 +158,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/29/Learning-Pytorch-in-2025/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/29/Learning-Pytorch-in-2025/" class="post-title-link" itemprop="url">Learning ESP32-DL library & Pytorch in 2025</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-29 10:16:32" itemprop="dateCreated datePublished" datetime="2025-07-29T10:16:32+08:00">2025-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-15 12:55:26" itemprop="dateModified" datetime="2025-08-15T12:55:26+08:00">2025-08-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Learning-Pytorch-in-2025"><a href="#Learning-Pytorch-in-2025" class="headerlink" title="Learning Pytorch in 2025"></a>Learning Pytorch in 2025</h1><p>I want to develop an AI applciation using ESP32-S3 and discover that you need to know some basic kowledege about nerual network.</p>
+<p>ESP32 have AI library <code>ESP-DL</code>, but you need pytorch to train the model.</p>
+<p>Therefore, the first step is to learn pytorch and some basic deep learning concept. Otherwise it is very diffcult to code without background knowledge.</p>
+<h2 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h2><ul>
+<li>This blog will give you some importants points and reviews on the youtube video</li>
+</ul>
+<h2 id="Learn-from-youtube"><a href="#Learn-from-youtube" class="headerlink" title="Learn from youtube:"></a>Learn from youtube:</h2><p>Link: PyTorch for Deep Learning &amp; Machine Learning – Full Course  <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=V_xro1bcAuA">https://www.youtube.com/watch?v=V_xro1bcAuA</a></p>
+<h4 id="The-first-2-chapters"><a href="#The-first-2-chapters" class="headerlink" title="The first 2 chapters"></a>The first 2 chapters</h4><p>It is a introduction chapters which using a simple example of linear formula to demostrate the work flow of a neuru network.</p>
+<p>Basically shows how deep learning works with pytorch, basic naming convention, concept in deep learning and pytorch</p>
+<p>He use 8 hours of video for 2 chapters.</p>
+<ul>
+<li>Naming convention: scalar, vector in lower case, MATRIX, TENSOR in upper case. Why? I don’t know. It is just defacto standard.</li>
+<li>Random numbers are important. There are work flow : random number-&gt; look at data-&gt; update random number</li>
+<li>3 main errors you will face in pytorch<ul>
+<li><ol>
+<li>Incorrect shape: Tensor should have the same shape.</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>Incorrect device: what hardware implementation is using on that tensor, <code>cpu</code> or <code>cuda</code>. Error will pop up if two tensor have different device</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>Incorrect data type: Erro will pop up if tensor have differernt datatype</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><code>tensor.mean()</code> only accept float and complex datatype</li>
+<li><code>numpy</code> datatype use float64 by default when convert to tensor</li>
+<li>Basic work flow: Input-&gt;forward-&gt;loss fucction-&gt;optimize-&gt; loop</li>
+</ul>
+<h4 id="The-3rd-and-4th-chapters"><a href="#The-3rd-and-4th-chapters" class="headerlink" title="The 3rd and 4th chapters"></a>The 3rd and 4th chapters</h4><p>Introduce other kinds of deep learning: classification, CNNs, and using custom datasets.</p>
+<ul>
+<li>Use sklearn’s <code>train_test_split</code> to split the dataset.</li>
+<li>A linear formula does not work with non-linear data. Add an activation function to introduce non-linear characteristics.</li>
+<li>Introduction to activation functions.</li>
+<li>Typically, you need a <code>softmax</code> function to convert logits to prediction probabilities and then to classification labels.</li>
+</ul>
+<h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><ul>
+<li>This is an excellent video for beginners who do not have much background in neural networks.</li>
+<li>It focuses on coding and workflow, with concise explanations of how neural networks work.</li>
+<li>The instructor demonstrates real-time debugging while implementing the neural network, which is very helpful for understanding the process.</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>Arthur’s GitHub link: <a target="_blank" rel="noopener" href="https://github.com/mrdbourke">https://github.com/mrdbourke</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="tommok">
-      <meta itemprop="description" content="Small projects, small steps to sucess">
+      <meta itemprop="description" content="Small project, small step to success">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -359,7 +477,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="tommok">
-      <meta itemprop="description" content="Small projects, small steps to sucess">
+      <meta itemprop="description" content="Small project, small step to success">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -447,7 +565,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="tommok">
-      <meta itemprop="description" content="Small projects, small steps to sucess">
+      <meta itemprop="description" content="Small project, small step to success">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -613,7 +731,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="tommok">
-      <meta itemprop="description" content="Small projects, small steps to sucess">
+      <meta itemprop="description" content="Small project, small step to success">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -671,7 +789,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="tommok">
-      <meta itemprop="description" content="Small projects, small steps to sucess">
+      <meta itemprop="description" content="Small project, small step to success">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -801,27 +919,27 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">tommok</p>
-  <div class="site-description" itemprop="description">Small projects, small steps to sucess</div>
+  <div class="site-description" itemprop="description">Small project, small step to success</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
