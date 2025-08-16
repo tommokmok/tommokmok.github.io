@@ -158,10 +158,131 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/15/Learning-ESP-DL-Series-00-First-Impression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/mcu.jpg">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/15/Learning-ESP-DL-Series-00-First-Impression/" class="post-title-link" itemprop="url">Learning ESP-DL Series 2025 - 00: First Impression</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-15 13:30:25" itemprop="dateCreated datePublished" datetime="2025-08-15T13:30:25+08:00">2025-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-17 00:09:36" itemprop="dateModified" datetime="2025-08-17T00:09:36+08:00">2025-08-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>This is the first post in a series of blogs that will explore the ESP-DL library in detail.</p>
+<p>At the time of writing, there is very little information or tutorials available for ESP-DL, especially practical guides on how to use it effectively. The official documentation from Espressif only explains what the library is, but does not clarify why you might need it, how to use it correctly, or provide helpful tips.</p>
+<p>In this post, I will focus on running an example code from the ESP-DL library to get started.</p>
+<blockquote>
+<p><strong>Note:</strong><br>This tutorial was written on 16-Aug-2025. If you are reading this in 2027 or later, some information may be outdated.</p>
+</blockquote>
+<h1 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h1><ul>
+<li>If you want to dive into the ESP-DL library, you may find useful details and practical steps here.</li>
+<li>When working with a new library, it’s always best to start by building and flashing the simplest example to test your hardware and development environment.</li>
+</ul>
+<h1 id="Core-Values"><a href="#Core-Values" class="headerlink" title="Core Values"></a>Core Values</h1><ul>
+<li>Software is like food—it has an expiration date, typically around 2 years. When learning a new library, you must dive in and understand how it works. Otherwise, you may find that everything has changed in a couple of years, with new libraries and completely different APIs.</li>
+<li>Focus on identifying the most stable concepts or principles from the library, as these are more likely to remain relevant.</li>
+</ul>
+<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
+<li>Install the ESP-IDF according to the <a target="_blank" rel="noopener" href="https://github.com/espressif/vscode-esp-idf-extension/blob/master/README.md">official guide</a>.</li>
+</ul>
+<h1 id="Development-Environment"><a href="#Development-Environment" class="headerlink" title="Development Environment"></a>Development Environment</h1><ul>
+<li><strong>MCU:</strong> General ESP32-S3 dev kit (Waveshare ESP32-S3-DEV-Kit-N8R8)</li>
+<li><strong>IDE:</strong> VS Code with ESP-IDF extension</li>
+<li><strong>IDF version:</strong> v5.4.2</li>
+<li><strong>ESP-DL version:</strong> v3.1.5</li>
+</ul>
+<h1 id="Running-the-Example-Code-Step-by-Step"><a href="#Running-the-Example-Code-Step-by-Step" class="headerlink" title="Running the Example Code: Step by Step"></a>Running the Example Code: Step by Step</h1><p>The first step is to run a simple example to ensure your hardware and development environment are working correctly.</p>
+<ol>
+<li><p><strong>Install the example code via the Components Manager in the VS Code extension.</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/tw35gWrw"><img src="https://i.ibb.co/tw35gWrw/step1-components-manager.png" alt="step1-components-manager" border="0"></a></p>
+</li>
+<li><p><strong>Find the esp-dl library and select the <code>how_to_run_model</code> example.</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/6Jnbwzy2"><img src="https://i.ibb.co/6Jnbwzy2/step2-how-to-run-model.png" alt="step2-how-to-run-model" border="0"></a></p>
+</li>
+<li><p><strong>Click “Create project from this example”.</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/Lh0C1YGy"><img src="https://i.ibb.co/Lh0C1YGy/step3-create-proj-from-example.png" alt="step3-create-proj-from-example" border="0"></a></p>
+</li>
+<li><p>The extension will automatically download the code and open it in a new window for this example.</p>
+</li>
+<li><p><strong>Set the target device.</strong><br>The extension will generate the appropriate build command.</p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/S4rmCjSG"><img src="https://i.ibb.co/S4rmCjSG/step4-set-target.png" alt="step4-set-target" border="0"></a></p>
+</li>
+<li><p><strong>Click “Build” and then “Flash” to upload the firmware.</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/RG9LR3jP"><img src="https://i.ibb.co/RG9LR3jP/build-sucess.png" alt="build-success" border="0"></a></p>
+<p> <a target="_blank" rel="noopener" href="https://ibb.co/zH2h5BDy"><img src="https://i.ibb.co/zH2h5BDy/Runs-success.png" alt="Runs-success" border="0"></a></p>
+</li>
+</ol>
+<p>For me, the example code ran perfectly on my device. This confirms that both the library and my development environment are set up correctly.</p>
+<p>This initial verification is very important. If anything goes wrong in the future, I can always re-flash this working firmware to check if the issue is hardware-related or due to configuration (e.g., <code>sdkconfig</code>). This approach can save a lot of debugging time.</p>
+<hr>
+<p><em>Stay tuned for the next post in this series, where I will dive deeper into ESP-DL features and real-world applications.</em></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/29/Learning-Pytorch-in-2025/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -279,7 +400,7 @@
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -475,7 +596,7 @@
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/08/Hexo-Blog-finetune-2025/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -563,7 +684,7 @@
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/04/Hexo-blog-in-Github-page-2025/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -729,7 +850,7 @@
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/04/Init/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -787,7 +908,7 @@
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/07/04/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/mcu.jpg">
       <meta itemprop="name" content="tommok">
       <meta itemprop="description" content="Small project, small step to success">
     </span>
@@ -918,6 +1039,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tommok"
+      src="/images/mcu.jpg">
   <p class="site-author-name" itemprop="name">tommok</p>
   <div class="site-description" itemprop="description">Small project, small step to success</div>
 </div>
@@ -926,20 +1049,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
