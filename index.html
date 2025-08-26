@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/embedded_32_32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/embedded_16_16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tommokmok.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"tommokmok.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Small project, small step to success">
@@ -141,10 +141,6 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
 
 
     <main class="main">
@@ -183,7 +179,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-08-18 10:06:03 / Modified: 14:09:08" itemprop="dateCreated datePublished" datetime="2025-08-18T10:06:03+08:00">2025-08-18</time>
+              <time title="Created: 2025-08-18 10:06:03 / Modified: 14:45:01" itemprop="dateCreated datePublished" datetime="2025-08-18T10:06:03+08:00">2025-08-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,74 +212,14 @@
 <li>You should comment out the touch sensor driver and button driver code if you are not using the same hardware as the example.</li>
 <li>Make sure you clearly understand the <code>col</code> and <code>row</code> definitions in the example code.</li>
 </ul>
-<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
-<li>Install the ESP-IDF according to the <a target="_blank" rel="noopener" href="https://github.com/espressif/vscode-esp-idf-extension/blob/master/README.md">official guide</a>.</li>
-</ul>
-<h1 id="Development-Environment"><a href="#Development-Environment" class="headerlink" title="Development Environment"></a>Development Environment</h1><ul>
-<li><strong>MCU:</strong> General ESP32-S3 dev kit (Waveshare ESP32-S3-DEV-Kit-N8R8)</li>
-<li><strong>IDE:</strong> VS Code with ESP-IDF extension</li>
-<li><strong>IDF version:</strong> v5.4.2</li>
-<li><strong>ESP-DL version:</strong> v3.1.5</li>
-<li><strong>touchpad-digit-recognition example code:</strong> <a target="_blank" rel="noopener" href="https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition">Commit id: 3e35842 date: Jun 9, 2025</a></li>
-</ul>
-<h1 id="Code-Analysis"><a href="#Code-Analysis" class="headerlink" title="Code Analysis"></a>Code Analysis</h1><ul>
-<li>The data flow is straightforward: it gets data from the touch sensor (7x6), expands it to 30x25 pixel data, then feeds it to the neural network and calls the predict function of the ESP-DL API.</li>
-<li>The important functions are <code>touch_digit_task</code>, which handles data input to the network, and <code>touch_digit_recognition_task</code>, which calls the ESP-DL API.</li>
-<li>The input data is a 1D array of <code>uint8</code> values (0 or 1), representing the digit.</li>
-</ul>
-<h1 id="Running-the-Example-Code-Step-by-Step"><a href="#Running-the-Example-Code-Step-by-Step" class="headerlink" title="Running the Example Code: Step by Step"></a>Running the Example Code: Step by Step</h1><ol>
-<li><p>I couldn’t find the example in the IDF extension, so I directly copied the code from GitHub. Copy the entire <a target="_blank" rel="noopener" href="https://github.com/espressif/esp-iot-solution/tree/master">esp-iot-solution</a> repository.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/DPPc2NqJ"><img src="https://i.ibb.co/DPPc2NqJ/source-code-location.png" alt="source-code-location" border="0"></a></p>
-</li>
-<li><p>Open the folder <code>touchpad_digit_recognition</code> located at <code>esp-iot-solution-master\examples\ai\esp_dl\touchpad_digit_recognition\</code>.</p>
-</li>
-<li><p>Set the device type to <code>esp32s3</code>, then build and flash the firmware.</p>
-<p> <a target="_blank" rel="noopener" href="https://imgbb.com/"><img src="https://i.ibb.co/nMMSDSmf/config-sdkconfig.png" alt="config-sdkconfig" border="0"></a></p>
-</li>
-<li><p>Unfortunately, after flashing the firmware, I encountered a <code>PSRAM</code> error.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/MDJqrT9b"><img src="https://i.ibb.co/MDJqrT9b/run-error.png" alt="run-error" border="0"></a></p>
-</li>
-<li><p>This error did not occur in the previous example, so it is likely due to a configuration issue in <code>sdkconfig</code>.</p>
-</li>
-<li><p>Update the <code>sdkconfig</code>: Make sure to use “Octal Mode PSRAM”.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/TDrk2fzW"><img src="https://i.ibb.co/TDrk2fzW/update-spiram-mode.png" alt="update-spiram-mode" border="0"></a></p>
-</li>
-<li><p>The PSRAM error was fixed, but another error occurred: <code>normalization save</code>.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/j9SkmRcM"><img src="https://i.ibb.co/j9SkmRcM/erreo2.png" alt="erreo2" border="0"></a></p>
-</li>
-<li><p>After reviewing the code in <code>normalization_save.cpp</code>, I found a bug: it checks the NVS but does not verify if the <code>KEY</code> data exists. As a result, the error always appears unless you call <code>set_normalization_data</code>. My solution was to add a call to <code>set_normalization_data</code> after <code>nvs_get_blob</code> if there is an error.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/S4R3qy1h"><img src="https://i.ibb.co/S4R3qy1h/normalization-error.png" alt="normalization-error" border="0"></a></p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ret = nvs_get_blob(my_handle, KEY, data, &amp;len);</span><br><span class="line"><span class="keyword">if</span> (ret != ESP_OK)</span><br><span class="line">&#123;</span><br><span class="line">    ESP_LOGW(TAG, <span class="string">&quot;Warn (%s) nvs_get_blob data fail. Set a new data&quot;</span>, esp_err_to_name(ret));</span><br><span class="line">    <span class="type">touch_digit_data_t</span> _data = &#123;&#125;;</span><br><span class="line">    set_normalization_data(&amp;_data);</span><br><span class="line"></span><br><span class="line">    ret = nvs_get_blob(my_handle, KEY, data, &amp;len);</span><br><span class="line">    <span class="keyword">if</span> (ret != ESP_OK)</span><br><span class="line">    &#123;</span><br><span class="line">        ESP_LOGE(TAG, <span class="string">&quot;Error (%s) reading normalization data!&quot;</span>, esp_err_to_name(ret));</span><br><span class="line">        nvs_close(my_handle);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>From the code, the definitions of ROW and COL are not as expected. The row length is the number of vertical series, and col is the number of horizontal series. This is unclear and could be considered a bug in their code.</p>
-<p> <a target="_blank" rel="noopener" href="https://imgbb.com/"><img src="https://i.ibb.co/nMMSDSmf/config-sdkconfig.png" alt="config-sdkconfig" border="0"></a></p>
-</li>
-</ol>
-<blockquote>
-<p>Normally, <code>ROW</code> should refer to number of horizontial series. <code>COL</code> should refer to number of vertical series.</p>
-</blockquote>
-<ol start="10">
-<li><p>With the help of <code>tool.html</code>, which can generate a 1D array representing the 30x25 pixels of a digit, you can test the code with fixed data first using this tool.</p>
-<blockquote>
-<p>The tool uses pure JS, HTML, and CSS. Reference: <a target="_blank" rel="noopener" href="https://gitee.com/Shine_Zhang/esp32s3_dl_helloworld/tree/main/04_tool">https://gitee.com/Shine_Zhang/esp32s3_dl_helloworld/tree/main/04_tool</a></p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://ibb.co/v4Bwzg4w"><img src="https://i.ibb.co/v4Bwzg4w/digi-tool.png" alt="digi-tool" border="0"></a></p>
-</li>
-<li><p>Refactor the <code>touch_digit_task</code>. The entry point for data input to the neural network is <code>xQueueSend(xImageQueue, &amp;image_data, portMAX_DELAY)</code>.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">touch_digit_task</span><span class="params">(<span class="type">void</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Copy the raw data to the TouchImage</span></span><br><span class="line">    <span class="built_in">memcpy</span>(g_image.data, mnistData, <span class="keyword">sizeof</span>(mnistData));</span><br><span class="line">    <span class="comment">// Print the TouchImage row length and column length</span></span><br><span class="line">    ESP_LOGI(TAG, <span class="string">&quot;TouchImage row length: %d, column length: %d\n&quot;</span>, (<span class="type">int</span>)g_image.row_length, (<span class="type">int</span>)g_image.col_length);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Send data to DL inference</span></span><br><span class="line">        <span class="type">image_data_t</span> image_data;</span><br><span class="line">        image_data.size = g_image.col_length * g_image.row_length;</span><br><span class="line">        image_data.data = new <span class="type">uint8_t</span>[image_data.size];</span><br><span class="line">        <span class="keyword">if</span> (image_data.data != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memcpy</span>(image_data.data, g_image.data, image_data.size);</span><br><span class="line">            xQueueSend(xImageQueue, &amp;image_data, portMAX_DELAY);</span><br><span class="line">        &#125;</span><br><span class="line">        vTaskDelay(<span class="number">3000</span>); <span class="comment">// Delay for 3 seconds before next iteration</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Build and run—success!</p>
-<p><a target="_blank" rel="noopener" href="https://ibb.co/1fLMDVr6"><img src="https://i.ibb.co/1fLMDVr6/run-ok.png" alt="run-ok" border="0"></a></p>
-</li>
-</ol>
-<h1 id="Issue-Summary"><a href="#Issue-Summary" class="headerlink" title="Issue Summary"></a>Issue Summary</h1><ul>
-<li>Pay attention to <code>sdkconfig</code>. Incorrect PSRAM settings will cause PSRAM issues.</li>
-<li>Ensure the input data format is correct. Incorrect <code>row</code> and <code>col</code> values will lead to wrong predictions.</li>
-<li>Comment out all hardware-specific code that is not relevant to your device. Otherwise, it may cause unexpected behavior.</li>
-</ul>
-<hr>
-<p>*In the next post in this series, we will replicate this example code to become more familiar with the entire development</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -333,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-17 00:09:36" itemprop="dateModified" datetime="2025-08-17T00:09:36+08:00">2025-08-17</time>
+                <time title="Modified: 2025-08-18 14:46:49" itemprop="dateModified" datetime="2025-08-18T14:46:49+08:00">2025-08-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -370,41 +306,14 @@
 <li>Software is like food—it has an expiration date, typically around 2 years. When learning a new library, you must dive in and understand how it works. Otherwise, you may find that everything has changed in a couple of years, with new libraries and completely different APIs.</li>
 <li>Focus on identifying the most stable concepts or principles from the library, as these are more likely to remain relevant.</li>
 </ul>
-<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
-<li>Install the ESP-IDF according to the <a target="_blank" rel="noopener" href="https://github.com/espressif/vscode-esp-idf-extension/blob/master/README.md">official guide</a>.</li>
-</ul>
-<h1 id="Development-Environment"><a href="#Development-Environment" class="headerlink" title="Development Environment"></a>Development Environment</h1><ul>
-<li><strong>MCU:</strong> General ESP32-S3 dev kit (Waveshare ESP32-S3-DEV-Kit-N8R8)</li>
-<li><strong>IDE:</strong> VS Code with ESP-IDF extension</li>
-<li><strong>IDF version:</strong> v5.4.2</li>
-<li><strong>ESP-DL version:</strong> v3.1.5</li>
-</ul>
-<h1 id="Running-the-Example-Code-Step-by-Step"><a href="#Running-the-Example-Code-Step-by-Step" class="headerlink" title="Running the Example Code: Step by Step"></a>Running the Example Code: Step by Step</h1><p>The first step is to run a simple example to ensure your hardware and development environment are working correctly.</p>
-<ol>
-<li><p><strong>Install the example code via the Components Manager in the VS Code extension.</strong></p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/tw35gWrw"><img src="https://i.ibb.co/tw35gWrw/step1-components-manager.png" alt="step1-components-manager" border="0"></a></p>
-</li>
-<li><p><strong>Find the esp-dl library and select the <code>how_to_run_model</code> example.</strong></p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/6Jnbwzy2"><img src="https://i.ibb.co/6Jnbwzy2/step2-how-to-run-model.png" alt="step2-how-to-run-model" border="0"></a></p>
-</li>
-<li><p><strong>Click “Create project from this example”.</strong></p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/Lh0C1YGy"><img src="https://i.ibb.co/Lh0C1YGy/step3-create-proj-from-example.png" alt="step3-create-proj-from-example" border="0"></a></p>
-</li>
-<li><p>The extension will automatically download the code and open it in a new window for this example.</p>
-</li>
-<li><p><strong>Set the target device.</strong><br>The extension will generate the appropriate build command.</p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/S4rmCjSG"><img src="https://i.ibb.co/S4rmCjSG/step4-set-target.png" alt="step4-set-target" border="0"></a></p>
-</li>
-<li><p><strong>Click “Build” and then “Flash” to upload the firmware.</strong></p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/RG9LR3jP"><img src="https://i.ibb.co/RG9LR3jP/build-sucess.png" alt="build-success" border="0"></a></p>
-<p> <a target="_blank" rel="noopener" href="https://ibb.co/zH2h5BDy"><img src="https://i.ibb.co/zH2h5BDy/Runs-success.png" alt="Runs-success" border="0"></a></p>
-</li>
-</ol>
-<p>For me, the example code ran perfectly on my device. This confirms that both the library and my development environment are set up correctly.</p>
-<p>This initial verification is very important. If anything goes wrong in the future, I can always re-flash this working firmware to check if the issue is hardware-related or due to configuration (e.g., <code>sdkconfig</code>). This approach can save a lot of debugging time.</p>
-<hr>
-<p><em>Stay tuned for the next post in this series, where I will dive deeper into ESP-DL features and real-world applications.</em></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/15/Learning-ESP-DL-Series-00-First-Impression/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -454,7 +363,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-15 12:55:26" itemprop="dateModified" datetime="2025-08-15T12:55:26+08:00">2025-08-15</time>
+                <time title="Modified: 2025-08-18 14:46:44" itemprop="dateModified" datetime="2025-08-18T14:46:44+08:00">2025-08-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -484,45 +393,14 @@
 <li>This blog will give you some importants points and reviews on the youtube video</li>
 </ul>
 <h2 id="Learn-from-youtube"><a href="#Learn-from-youtube" class="headerlink" title="Learn from youtube:"></a>Learn from youtube:</h2><p>Link: PyTorch for Deep Learning &amp; Machine Learning – Full Course  <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=V_xro1bcAuA">https://www.youtube.com/watch?v=V_xro1bcAuA</a></p>
-<h4 id="The-first-2-chapters"><a href="#The-first-2-chapters" class="headerlink" title="The first 2 chapters"></a>The first 2 chapters</h4><p>It is a introduction chapters which using a simple example of linear formula to demostrate the work flow of a neuru network.</p>
-<p>Basically shows how deep learning works with pytorch, basic naming convention, concept in deep learning and pytorch</p>
-<p>He use 8 hours of video for 2 chapters.</p>
-<ul>
-<li>Naming convention: scalar, vector in lower case, MATRIX, TENSOR in upper case. Why? I don’t know. It is just defacto standard.</li>
-<li>Random numbers are important. There are work flow : random number-&gt; look at data-&gt; update random number</li>
-<li>3 main errors you will face in pytorch<ul>
-<li><ol>
-<li>Incorrect shape: Tensor should have the same shape.</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>Incorrect device: what hardware implementation is using on that tensor, <code>cpu</code> or <code>cuda</code>. Error will pop up if two tensor have different device</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>Incorrect data type: Erro will pop up if tensor have differernt datatype</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><code>tensor.mean()</code> only accept float and complex datatype</li>
-<li><code>numpy</code> datatype use float64 by default when convert to tensor</li>
-<li>Basic work flow: Input-&gt;forward-&gt;loss fucction-&gt;optimize-&gt; loop</li>
-</ul>
-<h4 id="The-3rd-and-4th-chapters"><a href="#The-3rd-and-4th-chapters" class="headerlink" title="The 3rd and 4th chapters"></a>The 3rd and 4th chapters</h4><p>Introduce other kinds of deep learning: classification, CNNs, and using custom datasets.</p>
-<ul>
-<li>Use sklearn’s <code>train_test_split</code> to split the dataset.</li>
-<li>A linear formula does not work with non-linear data. Add an activation function to introduce non-linear characteristics.</li>
-<li>Introduction to activation functions.</li>
-<li>Typically, you need a <code>softmax</code> function to convert logits to prediction probabilities and then to classification labels.</li>
-</ul>
-<h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><ul>
-<li>This is an excellent video for beginners who do not have much background in neural networks.</li>
-<li>It focuses on coding and workflow, with concise explanations of how neural networks work.</li>
-<li>The instructor demonstrates real-time debugging while implementing the neural network, which is very helpful for understanding the process.</li>
-</ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>Arthur’s GitHub link: <a target="_blank" rel="noopener" href="https://github.com/mrdbourke">https://github.com/mrdbourke</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/29/Learning-Pytorch-in-2025/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -572,7 +450,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-22 13:05:08" itemprop="dateModified" datetime="2025-07-22T13:05:08+08:00">2025-07-22</time>
+                <time title="Modified: 2025-08-26 19:32:16" itemprop="dateModified" datetime="2025-08-26T19:32:16+08:00">2025-08-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -614,111 +492,14 @@
 </li>
 </ul>
 <h2 id="Screenshots-Demo"><a href="#Screenshots-Demo" class="headerlink" title="Screenshots &amp; Demo"></a>Screenshots &amp; Demo</h2><p><a target="_blank" rel="noopener" href="https://ibb.co/LXDT5wT2"><img src="https://i.ibb.co/LXDT5wT2/sketchpad.gif" alt="sketchpad" border="0"></a></p>
-<h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul>
-<li>Simple sketchpad to draw on the screen</li>
-<li>Button to clear the screen</li>
-<li>Button to change the line width</li>
-</ul>
-<h2 id="Development-Timeline"><a href="#Development-Timeline" class="headerlink" title="Development Timeline"></a>Development Timeline</h2><table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Milestone&#x2F;Note</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2025-07-16</td>
-<td>Project started</td>
-</tr>
-<tr>
-<td>2025-07-21</td>
-<td>v1 release</td>
-</tr>
-</tbody></table>
-<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h3><ul>
-<li>VS Code with the <a target="_blank" rel="noopener" href="https://platformio.org/">PlatformIO</a> extension</li>
-<li>ESP32-S3 board + 2.8” TFT LCD<ul>
-<li>Hardware purchased from Taobao. More info: <a target="_blank" rel="noopener" href="http://wiki.waaax.cn/boards/ESP32/ESP32-LVGL%E5%BC%80%E5%8F%91%E6%9D%BF.html">ESP32-LVGL开发板</a><blockquote>
-<p><strong>Note:</strong> This dev board is not recommended due to hardware issues. It may reset automatically, especially when connected to a PC.</p>
-</blockquote>
-</li>
-<li>ESP32-S3-N8R8</li>
-<li>LCD Driver: ST7989, 320 x 240 pixels</li>
-<li>Touch Driver: XPT2046</li>
-</ul>
-</li>
-</ul>
-<h3 id="Building-Flashing"><a href="#Building-Flashing" class="headerlink" title="Building &amp; Flashing"></a>Building &amp; Flashing</h3><ol>
-<li><p>Clone this repository:</p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/tommokmok/esp32s3_YetAnotherSketchpad</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Open the project in PlatformIO (VS Code).</p>
-</li>
-<li><p>Build and upload to your ESP32-S3 board.</p>
-</li>
-</ol>
-<h2 id="File-Structure"><a href="#File-Structure" class="headerlink" title="File Structure"></a>File Structure</h2><p>All libraries are placed in the local <code>lib/</code> directory for convenience.</p>
-<p><strong>Pros:</strong></p>
-<ul>
-<li>No need to download libraries from the web when opening the project for the first time.</li>
-<li>You can modify the source if you need specific functions.</li>
-</ul>
-<p><strong>Cons:</strong></p>
-<ul>
-<li>Larger repository size.</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">esp32s3_YetAnotherSketchpad/</span><br><span class="line"></span><br><span class="line">├── lib/                            # External and user libraries</span><br><span class="line">│   ├── lvgl/                       # LVGL graphics library (if added locally)</span><br><span class="line">│   ├── LovyanGFX/                  # LovyanGFX display library (if added locally)</span><br><span class="line">│   ├── hal/                        # Hardware Abstraction Layer (display, touch, etc.)</span><br><span class="line">│   ├── appController/              # Application controller logic (state management, UI flow)</span><br><span class="line">│   └── sketchpad/                  # Sketchpad implementation (drawing logic, UI components)</span><br><span class="line">├── src/                            # Source code</span><br><span class="line">│   ├── main.cpp                    # Main application entry point</span><br><span class="line">│   └── ...                         # Other source files</span><br><span class="line">├── platformio.ini                  # PlatformIO project configuration</span><br><span class="line">├── README.md                       # This documentation</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>lib&#x2F;lvgl&#x2F;</strong>: LVGL graphics library (added locally).</li>
-<li><strong>lib&#x2F;LovyanGFX&#x2F;</strong>: LovyanGFX display library (added locally).</li>
-<li><strong>lib&#x2F;hal&#x2F;</strong>: Hardware Abstraction Layer for display, touch, and other peripherals.</li>
-<li><strong>lib&#x2F;appController&#x2F;</strong>: Application controller logic, such as state management and UI flow.</li>
-<li><strong>lib&#x2F;sketchpad&#x2F;</strong>: Sketchpad UI implementation.</li>
-<li><strong>src&#x2F;main.cpp</strong>: Main application logic, including LVGL initialization and sketchpad setup.</li>
-</ul>
-<blockquote>
-<p><strong>Note:</strong> If you install libraries via the PlatformIO Library Manager, they will be managed automatically. If you add libraries manually, place them in the <code>lib/</code> directory as shown above.</p>
-</blockquote>
-<h2 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h2><h3 id="1-Porting-from-100ask-code"><a href="#1-Porting-from-100ask-code" class="headerlink" title="1. Porting from 100ask code"></a>1. Porting from 100ask code</h3><p>The original source code is available at: <a target="_blank" rel="noopener" href="https://github.com/100askTeam/lv_lib_100ask/tree/master/src/lv_100ask_sketchpad">https://github.com/100askTeam/lv_lib_100ask/tree/master/src/lv_100ask_sketchpad</a>.</p>
-<p>The main tasks were porting the code to the current hardware and updating it for LVGL v9.2.2.</p>
-<blockquote>
-<p>Note: LVGL v9.1 does not work for this example, nothing will be shown on the canvas.</p>
-</blockquote>
-<h4 id="Issues-while-porting-to-the-ESP32-S3-dev-board"><a href="#Issues-while-porting-to-the-ESP32-S3-dev-board" class="headerlink" title="Issues while porting to the ESP32-S3 dev board"></a>Issues while porting to the ESP32-S3 dev board</h4><ul>
-<li><p><code style="color : red">&quot;error: field &#39;img&#39; has incomplete type&quot;</code></p>
-<ul>
-<li>This occurs because the compiler can’t find some <code>struct</code> definitions.</li>
-<li>Solution: Add the following include for internal definitions, especially if you are customizing widgets:  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;lvgl/src/lvgl_private.h&quot;</span></span></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p><code style="color : red">No colorwheel in lvgl &gt;v9.0</code></p>
-<ul>
-<li>The colorwheel widget was removed in LVGL v9.0 and above. Disable related functions.</li>
-<li>See: <a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl/issues/4429#issuecomment-2051520229">https://github.com/lvgl/lvgl/issues/4429#issuecomment-2051520229</a></li>
-</ul>
-</li>
-<li><p><code style="color : red">&#39;dram0_0_seg&#39; overflowed</code></p>
-<ul>
-<li><p>The sketchpad needs a canvas object and buffer, which requires 240x320x2 bytes.</p>
-</li>
-<li><p>PlatformIO uses ESP-IDF v4.4 by default, which lacks some PSRAM features.</p>
-</li>
-<li><p>Add the following definition in <code>platformio.ini</code> to use standard C <code>malloc</code> for memory allocation. When the allocation is &gt;1k, it will use external RAM by default:</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-D <span class="string">&#x27;LV_USE_STDLIB_MALLOC=LV_STDLIB_CLIB&#x27;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Default SDK config location on Windows:</p>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The default sdkconfig location in Windows</span></span><br><span class="line">%homepath%\.platformio\packages\framework-arduinoespressif32\tools\sdk\esp32s3</span><br><span class="line"></span><br><span class="line"><span class="comment">// Default PSRAM usage definitions</span></span><br><span class="line">CONFIG_SPIRAM_USE_MALLOC=y</span><br><span class="line">CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=<span class="number">4096</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="Customization"><a href="#Customization" class="headerlink" title="Customization"></a>Customization</h2><p>If you have different LCD or touch hardware, update the <code>lvgl</code> and <code>LovyanGFX</code> configurations accordingly.</p>
-<ul>
-<li>For LVGL, add configuration options in <code>platformio.ini</code>.</li>
-<li>For LovyanGFX, edit <code>include/custom_disp.hpp</code>.</li>
-</ul>
-<h2 id="License"><a href="#License" class="headerlink" title="License"></a>License</h2><p>MIT</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -768,7 +549,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-09 10:38:11" itemprop="dateModified" datetime="2025-07-09T10:38:11+08:00">2025-07-09</time>
+                <time title="Modified: 2025-08-18 14:46:52" itemprop="dateModified" datetime="2025-08-18T14:46:52+08:00">2025-08-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -793,20 +574,14 @@
       
           <h1 id="Add-the-tags-and-categories-page"><a href="#Add-the-tags-and-categories-page" class="headerlink" title="Add the tags and categories page"></a>Add the tags and categories page</h1><p>You need to use below command to generate the web page for the tags and categories. Otherwise, it will show nothing on the tags and categories page.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="Update-the-scafflods"><a href="#Update-the-scafflods" class="headerlink" title="Update the scafflods"></a>Update the <code>scafflods</code></h1><p>Update the <code>post.md</code> in <code>scafflods</code> folder and add tags and ctegorees for each blog when using the <code>hexo new</code> command</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line"><span class="built_in">date</span>: &#123;&#123; <span class="built_in">date</span> &#125;&#125;</span><br><span class="line">categories: &#123;&#123; categories &#125;&#125;</span><br><span class="line">tags: &#123;&#123; tags &#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="More-tags-in-each-blog"><a href="#More-tags-in-each-blog" class="headerlink" title="More tags in each blog"></a>More tags in each blog</h1><p>If you want to have more tags in one blog, please using below convention in the blog.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">tags: </span><br><span class="line">- hexo</span><br><span class="line">- blog</span><br></pre></td></tr></table></figure>
-
-<h1 id="Conculsion"><a href="#Conculsion" class="headerlink" title="Conculsion"></a>Conculsion</h1><p>I am re-do sometings that someone or many orders that have done many years ago.<br>Maybe it is too late to start a my own technical blog.</p>
-<p>Base on my observation, many blogs that use Hexo + Next theme are not maintance after 2019…</p>
-<p>So far, the should should fully functional with minimal features. </p>
-<p>Next, I will adding more contents.</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>Blogs for 4 years ago<br><a target="_blank" rel="noopener" href="https://op30132.github.io/2019/12/24/hexo-tag-page/">https://op30132.github.io/2019/12/24/hexo-tag-page/</a><br><a target="_blank" rel="noopener" href="https://kemushi54.github.io/">https://kemushi54.github.io/</a></p>
-<p>Super good reference for hexo blog from zero. If I follow this, then I can save lots of time.<br><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20139218/ironman/3910?page=1">https://ithelp.ithome.com.tw/users/20139218/ironman/3910?page=1</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/08/Hexo-Blog-finetune-2025/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -856,7 +631,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-08 16:27:23" itemprop="dateModified" datetime="2025-07-08T16:27:23+08:00">2025-07-08</time>
+                <time title="Modified: 2025-08-18 14:55:34" itemprop="dateModified" datetime="2025-08-18T14:55:34+08:00">2025-08-18</time>
               </span>
 
           
@@ -890,89 +665,14 @@
 <li>Basic command line knowledge</li>
 </ul>
 <hr>
-<h2 id="Step-0-Install-nvs-and-hexo-cli"><a href="#Step-0-Install-nvs-and-hexo-cli" class="headerlink" title="Step 0: Install  nvs  and  hexo-cli"></a>Step 0: Install <code> nvs</code>  and <code> hexo-cli</code></h2><ul>
-<li>Downlaod and install the <code> nvs</code> </li>
-<li>You may encounter the below <code style="color : red">Policy error</code></li>
-</ul>
-<p><img src="https://i.ibb.co/zHs8LBhM/policies-Error.jpg" alt="Error"></p>
-<ul>
-<li>Update the policy in windows powershell terminal in Admin. mode</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Get-ExecutionPolicy</span><br><span class="line">Get-ExecutionPolicy -List</span><br><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="Step-1-Install-Hexo"><a href="#Step-1-Install-Hexo" class="headerlink" title="Step 1: Install   Hexo"></a>Step 1: Install  <code> Hexo</code></h2><ul>
-<li>Install <code> hexo-cli</code> via <code> npm</code></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="Step-2-Initialize-Your-Blog"><a href="#Step-2-Initialize-Your-Blog" class="headerlink" title="Step 2: Initialize Your Blog"></a>Step 2: Initialize Your Blog</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line"><span class="built_in">cd</span> my-blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<p><strong>Important:</strong><br>Make sure you are in an empty directory before running <code>hexo init</code>.</p>
-<hr>
-<h2 id="Step-3-Create-a-GitHub-Repository"><a href="#Step-3-Create-a-GitHub-Repository" class="headerlink" title="Step 3: Create a GitHub Repository"></a>Step 3: Create a GitHub Repository</h2><ul>
-<li><p>Name it <code>&lt;username&gt;.github.io</code> for user&#x2F;organization pages.</p>
-</li>
-<li><p>For project pages, use any repo name and set the correct branch in Hexo config.</p>
-</li>
-</ul>
-<img src="https://i.ibb.co/p64FNdNF/github-page-settings.png" alt="github-page-settings" border="0">
-
-<p><strong>Note:</strong><br>Repository name and branch matter for GitHub Pages to work.</p>
-<hr>
-<h2 id="Step-4-Configure-config-yml"><a href="#Step-4-Configure-config-yml" class="headerlink" title="Step 4: Configure _config.yml"></a>Step 4: Configure <code>_config.yml</code></h2><ul>
-<li>Set your <code>url</code> to match your GitHub Pages URL:<br><code>https://&lt;username&gt;.github.io</code></li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://imgbb.com/"><img src="https://i.ibb.co/cSTVyxrX/config-url.png" alt="config-url" border="0"></a></p>
-<ul>
-<li>Update <code>deploy</code> settings for GitHub Pages.</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://imgbb.com/"><img src="https://i.ibb.co/XB63wfZ/github-deploy.png" alt="github-deploy" border="0"></a></p>
-<p><strong>Important:</strong>  </p>
-<ul>
-<li>Incorrect <code>url</code> or <code>deploy</code> config can cause broken links or failed deployments.</li>
-<li>The url link is different in the <code>url</code> and  <code>deploy</code> setting</li>
-</ul>
-<hr>
-<h2 id="Step-5-Add-nojekyll-file"><a href="#Step-5-Add-nojekyll-file" class="headerlink" title="Step 5: Add  .nojekyll file"></a>Step 5: Add <code> .nojekyll</code> file</h2><p>There are new steps for Github if you want to directly depkoy the web but not using Github internal build process. </p>
-<p>Add a <code> .nojekyll</code> file in the root of the deploy files</p>
-<p>So, you need to add a source file in <strong>Hexo</strong></p>
-<ol>
-<li>Add <code> .nojekyll</code> file in <code> soruce /_posts </code> folder</li>
-</ol>
-<img src="https://i.ibb.co/wNVkLrxS/add-nojekyll-in-src.png" alt="add-nojekyll-in-src" border="0">
-
-<ol start="2">
-<li>Add Include settgins in <code>_config.yml</code> file</li>
-</ol>
-<img src="https://i.ibb.co/qY8dKsPv/add-nojeyll-in-config.png" alt="add-nojeyll-in-config" border="0">
-
-
-<hr>
-<h2 id="Step-6-Deploy-with-Hexo"><a href="#Step-6-Deploy-with-Hexo" class="headerlink" title="Step 6: Deploy with Hexo"></a>Step 6: Deploy with Hexo</h2><p>Install the deployer:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>Update <code>_config.yml</code>:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/&lt;username&gt;/&lt;repo&gt;.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
-
-<p>Deploy:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br><span class="line"></span><br><span class="line"><span class="comment"># On Windows, you need to split the above command</span></span><br><span class="line">hexo clean</span><br><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
-
-<h2 id="Theme-setting"><a href="#Theme-setting" class="headerlink" title="Theme setting"></a>Theme setting</h2><p>Have a look at the Hexo themes here: <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Theme</a></p>
-<p>However, most of them seem outdated and are not maintained anymore. Finally, I chose the <strong>hexo-theme-next</strong> theme.</p>
-<p>It has a new repo for maintenance: <a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a></p>
-<p>However, it has not been updated for 5 years….</p>
-<p>I have a little bit of regret choosing the Hexo blog framework…</p>
-<hr>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Setting up Hexo on GitHub Pages in 2025 is straightforward but seems it is a bit outdated.</p>
-<hr>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo Documentation</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/04/Hexo-blog-in-Github-page-2025/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1080,7 +780,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-16 10:47:17" itemprop="dateModified" datetime="2025-07-16T10:47:17+08:00">2025-07-16</time>
+                <time title="Modified: 2025-08-18 14:46:51" itemprop="dateModified" datetime="2025-08-18T14:46:51+08:00">2025-08-18</time>
               </span>
 
           
@@ -1099,18 +799,14 @@
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Write-new-post"><a href="#Write-new-post" class="headerlink" title="Write new post"></a>Write new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/04/hello-world/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1223,6 +919,10 @@
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>
@@ -1251,6 +951,26 @@
   </div>
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
@@ -1302,4 +1022,5 @@
   
 
 </body>
+
 </html>
