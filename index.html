@@ -154,6 +154,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/mcu.jpg">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/" class="post-title-link" itemprop="url">Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-27 08:48:57 / Modified: 14:13:49" itemprop="dateCreated datePublished" datetime="2025-08-27T08:48:57+08:00">2025-08-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>In the previous blog, we updated the example code to be compatible with a general ESP32-S3 dev kit module.</p>
+<p>One issue with the ESP-DL <code>digit recognition</code> example is that they do not provide the original PyTorch model or the output files generated after the <code>esp-ppq</code> process. Only the final <code>.espdl</code> file is provided.</p>
+<p>Therefore, we need to build our own model based on their dataset.</p>
+<p>Fortunately, Espressif provides the code for training, testing, and quantizing the model.</p>
+<p>In this post, I will walk through the entire process: building the <code>.espdl</code> model using PyTorch and the <code>esp-ppq</code> library, and finally deploying it to the ESP32-S3 to verify it works.</p>
+<h1 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h1><ul>
+<li>Learn how to build a neural network using PyTorch.</li>
+<li>Understand the complete workflow from dataset preparation to deployment on the ESP32-S3.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -714,10 +797,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-07-04 13:56:52 / Modified: 13:57:18" itemprop="dateCreated datePublished" datetime="2025-07-04T13:56:52+08:00">2025-07-04</time>
+              <time title="Created: 2025-07-04 13:56:52" itemprop="dateCreated datePublished" datetime="2025-07-04T13:56:52+08:00">2025-07-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-27 14:17:10" itemprop="dateModified" datetime="2025-08-27T14:17:10+08:00">2025-08-27</time>
+              </span>
 
           
 
@@ -730,7 +819,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="That-is-a-test"><a href="#That-is-a-test" class="headerlink" title="That is a test"></a>That is a test</h3>
+          <h3 id="Common-command-on-hexo"><a href="#Common-command-on-hexo" class="headerlink" title="Common command on hexo"></a>Common command on hexo</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo d -g</span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -889,7 +978,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

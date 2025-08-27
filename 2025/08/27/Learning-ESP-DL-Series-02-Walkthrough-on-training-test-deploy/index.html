@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/embedded_32_32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/embedded_16_16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tommokmok.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="IntroductionIn the previous blog, we updated the example code to be compatible with a general ESP32-S3 dev kit module. One issue with the ESP-DL digit recognition example is that they do not provide t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment">
+<meta property="og:url" content="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/index.html">
+<meta property="og:site_name" content="Embedded Projects">
+<meta property="og:description" content="IntroductionIn the previous blog, we updated the example code to be compatible with a general ESP32-S3 dev kit module. One issue with the ESP-DL digit recognition example is that they do not provide t">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.ibb.co/MHYVKcf/check-dataset.png">
+<meta property="og:image" content="https://i.ibb.co/DDrVTK9b/training.png">
+<meta property="og:image" content="https://i.ibb.co/jvNjMJh7/quantization-finished.png">
+<meta property="og:image" content="https://i.ibb.co/Jhv2pYc/onnx-viewer.png">
+<meta property="og:image" content="https://i.ibb.co/9Sdpm5j/copy-espdl.png">
+<meta property="og:image" content="https://i.ibb.co/G4SL1QsP/update-cmake-list.png">
+<meta property="og:image" content="https://i.ibb.co/d4j50MN9/seems-works.png">
+<meta property="article:published_time" content="2025-08-27T00:48:57.000Z">
+<meta property="article:modified_time" content="2025-08-27T06:13:49.647Z">
+<meta property="article:author" content="tommok">
+<meta property="article:tag" content="ESP32-S3">
+<meta property="article:tag" content="ESP-DL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/MHYVKcf/check-dataset.png">
+
+<link rel="canonical" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment | Embedded Projects</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Embedded Projects</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Get busy Liviing</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/mcu.jpg">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-27 08:48:57 / Modified: 14:13:49" itemprop="dateCreated datePublished" datetime="2025-08-27T08:48:57+08:00">2025-08-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>In the previous blog, we updated the example code to be compatible with a general ESP32-S3 dev kit module.</p>
+<p>One issue with the ESP-DL <code>digit recognition</code> example is that they do not provide the original PyTorch model or the output files generated after the <code>esp-ppq</code> process. Only the final <code>.espdl</code> file is provided.</p>
+<p>Therefore, we need to build our own model based on their dataset.</p>
+<p>Fortunately, Espressif provides the code for training, testing, and quantizing the model.</p>
+<p>In this post, I will walk through the entire process: building the <code>.espdl</code> model using PyTorch and the <code>esp-ppq</code> library, and finally deploying it to the ESP32-S3 to verify it works.</p>
+<h1 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h1><ul>
+<li>Learn how to build a neural network using PyTorch.</li>
+<li>Understand the complete workflow from dataset preparation to deployment on the ESP32-S3.</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
+<li>Install the ESP-IDF according to the <a target="_blank" rel="noopener" href="https://github.com/espressif/vscode-esp-idf-extension/blob/master/README.md">official guide</a>.</li>
+<li>Google Colab environment or similar for model training and quantization.</li>
+</ul>
+<h1 id="Development-Environment"><a href="#Development-Environment" class="headerlink" title="Development Environment"></a>Development Environment</h1><ul>
+<li><strong>MCU:</strong> General ESP32-S3 dev kit (Waveshare ESP32-S3-DEV-Kit-N8R8)</li>
+<li><strong>IDE:</strong> VS Code with ESP-IDF extension</li>
+<li><strong>IDF version:</strong> v5.4.2</li>
+<li><strong>ESP-DL version:</strong> v3.1.5</li>
+<li><strong>touchpad-digit-recognition example code:</strong> <a target="_blank" rel="noopener" href="https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition">Commit id: 3e35842 date: Jun 9, 2025</a></li>
+<li><strong>Python Version:</strong> v3.10.12 (Must use this version as <code>esp-ppq</code> does not support Python &gt;3.10)</li>
+<li><strong>PyTorch Version:</strong> v2.8 Stable</li>
+<li><strong>esp-dl package version:</strong> v1.0.1</li>
+</ul>
+<h1 id="Building-the-Model-Using-PyTorch-Step-by-Step"><a href="#Building-the-Model-Using-PyTorch-Step-by-Step" class="headerlink" title="Building the Model Using PyTorch: Step by Step"></a>Building the Model Using PyTorch: Step by Step</h1><p>To simplify the process, I recommend using Google Colab for model building.</p>
+<p>Since the default Python version in Colab is v3.12, we will use <code>konda</code> to set up a virtual environment with Python 3.10 for <code>esp-ppq</code> compatibility.</p>
+<p>Most of the code is adapted from the example, with added visualization functions to inspect the dataset.</p>
+<h2 id="1-Install-konda-for-the-Virtual-Python-Environment"><a href="#1-Install-konda-for-the-Virtual-Python-Environment" class="headerlink" title="1. Install konda for the Virtual Python Environment"></a>1. Install <code>konda</code> for the Virtual Python Environment</h2><blockquote>
+<p><code>konda</code> is a package that allows you to use <code>conda</code> in Colab. See <a target="_blank" rel="noopener" href="https://github.com/tamnguyenvan/konda">konda GitHub</a> for details.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">!pip install konda</span><br><span class="line"></span><br><span class="line">import konda</span><br><span class="line">konda.install()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check if conda is installed correctly</span></span><br><span class="line">!conda --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Create-a-Python-3-10-Environment-Using-konda"><a href="#2-Create-a-Python-3-10-Environment-Using-konda" class="headerlink" title="2. Create a Python 3.10 Environment Using konda"></a>2. Create a Python 3.10 Environment Using <code>konda</code></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Accept the channels</span></span><br><span class="line">!conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main</span><br><span class="line">!conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create virtual environment</span></span><br><span class="line">!konda create -n esp_dl python=3.10 -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># Activate the environment</span></span><br><span class="line">!konda activate esp_dl</span><br><span class="line"></span><br><span class="line"><span class="comment"># Check Python version</span></span><br><span class="line">!konda run <span class="string">&quot;python --version&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Install dependencies</span></span><br><span class="line">!konda run <span class="string">&quot;pip3 install torch torchvision esp-ppq&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Check torch and esp-ppq versions</span></span><br><span class="line">!konda run <span class="string">&quot;pip list&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Note:</strong> The package name for import is <code>esp_ppq</code>, not <code>esp-ppq</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> Installing torch and esp-ppq may take some time.</p>
+</blockquote>
+<h2 id="3-Download-the-Dataset"><a href="#3-Download-the-Dataset" class="headerlink" title="3. Download the Dataset"></a>3. Download the Dataset</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> zipfile</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line">data_path = Path(<span class="string">&quot;/data/&quot;</span>)</span><br><span class="line">image_path = data_path / <span class="string">&quot;dataset&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> image_path.is_dir():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;image_path&#125;</span> directory exists.&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Did not find <span class="subst">&#123;image_path&#125;</span> directory, creating one...&quot;</span>)</span><br><span class="line">    image_path.mkdir(parents=<span class="literal">True</span>, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Download data</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(data_path / <span class="string">&quot;dataset.zip&quot;</span>, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        request = requests.get(<span class="string">&quot;https://dl.espressif.com/AE/esp-iot-solution/touch_dataset.zip&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Downloading data...&quot;</span>)</span><br><span class="line">        f.write(request.content)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Unzip data</span></span><br><span class="line">    <span class="keyword">with</span> zipfile.ZipFile(data_path / <span class="string">&quot;dataset.zip&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> zip_ref:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Unzipping data...&quot;</span>)</span><br><span class="line">        zip_ref.extractall(image_path)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Prepare-the-Dataset"><a href="#4-Prepare-the-Dataset" class="headerlink" title="4. Prepare the Dataset"></a>4. Prepare the Dataset</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader, random_split</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"></span><br><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.Grayscale(num_output_channels=<span class="number">1</span>),</span><br><span class="line">    transforms.RandomAffine(degrees=<span class="number">10</span>, translate=(<span class="number">0.1</span>, <span class="number">0.1</span>)),</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.5</span>,), (<span class="number">0.5</span>,)),</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">dataset = datasets.ImageFolder(root=<span class="string">&#x27;/data/dataset/touch_dataset&#x27;</span>, transform=transform)</span><br><span class="line"></span><br><span class="line">train_size = <span class="built_in">int</span>(<span class="number">0.8</span> * <span class="built_in">len</span>(dataset))</span><br><span class="line">test_size = <span class="built_in">len</span>(dataset) - train_size</span><br><span class="line">train_dataset, test_dataset = random_split(dataset, [train_size, test_size])</span><br><span class="line"></span><br><span class="line">train_loader = DataLoader(dataset=train_dataset, batch_size=<span class="number">32</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_loader = DataLoader(dataset=test_dataset, batch_size=<span class="number">32</span>, shuffle=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Visualize-the-Dataset"><a href="#5-Visualize-the-Dataset" class="headerlink" title="5. Visualize the Dataset"></a>5. Visualize the Dataset</h2><p>Function to check random images from the dataset:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">display_random_images</span>(<span class="params">dataset: torch.utils.data.dataset.Dataset,</span></span><br><span class="line"><span class="params">                          classes: <span class="built_in">list</span>[<span class="built_in">str</span>] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">                          n: <span class="built_in">int</span> = <span class="number">10</span>,</span></span><br><span class="line"><span class="params">                          display_shape: <span class="built_in">bool</span> = <span class="literal">True</span>,</span></span><br><span class="line"><span class="params">                          seed: <span class="built_in">int</span> = <span class="literal">None</span></span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> n &gt; <span class="number">10</span>:</span><br><span class="line">        n = <span class="number">10</span></span><br><span class="line">        display_shape = <span class="literal">False</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;For display purposes, n shouldn&#x27;t be larger than 10, setting to 10 and removing shape display.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. Set random seed</span></span><br><span class="line">    <span class="keyword">if</span> seed:</span><br><span class="line">        random.seed(seed)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. Get random sample indexes</span></span><br><span class="line">    random_samples_idx = random.sample(<span class="built_in">range</span>(<span class="built_in">len</span>(dataset)), k=n)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. Setup plot</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">16</span>, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 6. Loop through samples and display random samples</span></span><br><span class="line">    <span class="keyword">for</span> i, targ_sample <span class="keyword">in</span> <span class="built_in">enumerate</span>(random_samples_idx):</span><br><span class="line">        targ_image, targ_label = dataset[targ_sample][<span class="number">0</span>], dataset[targ_sample][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 7. Adjust image tensor shape for plotting: [color_channels, height, width] -&gt; [color_channels, height, width]</span></span><br><span class="line">        targ_image_adjust = targ_image.permute(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Plot adjusted samples</span></span><br><span class="line">        plt.subplot(<span class="number">1</span>, n, i+<span class="number">1</span>)</span><br><span class="line">        plt.imshow(targ_image_adjust)</span><br><span class="line">        plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> classes:</span><br><span class="line">            title = <span class="string">f&quot;class: <span class="subst">&#123;classes[targ_label]&#125;</span>&quot;</span></span><br><span class="line">            <span class="keyword">if</span> display_shape:</span><br><span class="line">                title = title + <span class="string">f&quot;\nshape: <span class="subst">&#123;targ_image_adjust.shape&#125;</span>&quot;</span></span><br><span class="line">        plt.title(title)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Display random images from ImageFolder created Dataset</span></span><br><span class="line">display_random_images(train_dataset,</span><br><span class="line">                      n=<span class="number">5</span>,</span><br><span class="line">                      classes=class_names,</span><br><span class="line">                      seed=<span class="number">42</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/MHYVKcf"><img src="https://i.ibb.co/MHYVKcf/check-dataset.png" alt="check-dataset" border="0"></a></p>
+<h2 id="6-Define-Loss-Function-and-Optimizer"><a href="#6-Define-Loss-Function-and-Optimizer" class="headerlink" title="6. Define Loss Function and Optimizer"></a>6. Define Loss Function and Optimizer</h2><p>Use standard loss and optimizer for image classification:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">device = <span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span></span><br><span class="line">model = Net().to(device)</span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer = optim.Adam(model.parameters(), lr=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-Training-Process"><a href="#7-Training-Process" class="headerlink" title="7. Training Process"></a>7. Training Process</h2><p>Set <code>num_epochs</code> to 50 for faster training.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train_epoch</span>(<span class="params">model, train_loader, criterion, optimizer, device</span>):</span><br><span class="line">    model.train()</span><br><span class="line">    running_loss = <span class="number">0.0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> inputs, labels <span class="keyword">in</span> train_loader:</span><br><span class="line">        inputs, labels = inputs.to(device), labels.to(device)</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        outputs = model(inputs)</span><br><span class="line">        loss = criterion(outputs, labels)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line"></span><br><span class="line">        running_loss += loss.item()</span><br><span class="line">        _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)</span><br><span class="line">        total += labels.size(<span class="number">0</span>)</span><br><span class="line">        correct += (predicted == labels).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    epoch_loss = running_loss / <span class="built_in">len</span>(train_loader)</span><br><span class="line">    epoch_acc = <span class="number">100</span> * correct / total</span><br><span class="line">    <span class="keyword">return</span> epoch_loss, epoch_acc</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_epoch</span>(<span class="params">model, test_loader, criterion, device</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    running_loss = <span class="number">0.0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        <span class="keyword">for</span> inputs, labels <span class="keyword">in</span> test_loader:</span><br><span class="line">            inputs, labels = inputs.to(device), labels.to(device)</span><br><span class="line">            outputs = model(inputs)</span><br><span class="line">            loss = criterion(outputs, labels)</span><br><span class="line">            running_loss += loss.item()</span><br><span class="line">            _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)</span><br><span class="line">            total += labels.size(<span class="number">0</span>)</span><br><span class="line">            correct += (predicted == labels).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    epoch_loss = running_loss / <span class="built_in">len</span>(test_loader)</span><br><span class="line">    epoch_acc = <span class="number">100</span> * correct / total</span><br><span class="line">    <span class="keyword">return</span> epoch_loss, epoch_acc</span><br><span class="line"></span><br><span class="line">num_epochs = <span class="number">50</span></span><br><span class="line">train_acc_array = []</span><br><span class="line">test_acc_array = []</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs):</span><br><span class="line">    train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)</span><br><span class="line">    test_loss, test_acc = test_epoch(model, test_loader, criterion, device)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Epoch [<span class="subst">&#123;epoch + <span class="number">1</span>&#125;</span>/<span class="subst">&#123;num_epochs&#125;</span>], &#x27;</span></span><br><span class="line">        <span class="string">f&#x27;Train Loss: <span class="subst">&#123;train_loss:<span class="number">.4</span>f&#125;</span>, Train Acc: <span class="subst">&#123;train_acc:<span class="number">.2</span>f&#125;</span>%, &#x27;</span></span><br><span class="line">        <span class="string">f&#x27;Test Loss: <span class="subst">&#123;test_loss:<span class="number">.4</span>f&#125;</span>, Test Acc: <span class="subst">&#123;test_acc:<span class="number">.2</span>f&#125;</span>%&#x27;</span>)</span><br><span class="line">    train_acc_array.append(train_acc)</span><br><span class="line">    test_acc_array.append(test_acc)</span><br><span class="line"></span><br><span class="line">torch.save(model.state_dict(), <span class="string">&#x27;/content/my_final_model.pth&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/DDrVTK9b"><img src="https://i.ibb.co/DDrVTK9b/training.png" alt="training" border="0"></a></p>
+<p>Now you have a trained PyTorch model.</p>
+<h2 id="8-Quantize-the-Model-Using-esp-ppq"><a href="#8-Quantize-the-Model-Using-esp-ppq" class="headerlink" title="8. Quantize the Model Using esp-ppq"></a>8. Quantize the Model Using <code>esp-ppq</code></h2><p>Since we are using <code>konda</code>, the quantization script should be saved to a file. Use <code>%%writefile</code> in Colab.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">%%writefile espdl_model_quant.py</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> esp_ppq.api <span class="keyword">import</span> espdl_quantize_torch</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> random_split</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms, datasets</span><br><span class="line">BATCH_SIZE = <span class="number">32</span></span><br><span class="line">INPUT_SHAPE = [<span class="number">1</span>, <span class="number">25</span>, <span class="number">30</span>]</span><br><span class="line">TARGET = <span class="string">&quot;esp32s3&quot;</span></span><br><span class="line">NUM_OF_BITS = <span class="number">8</span></span><br><span class="line">ESPDL_MODEL_PATH = <span class="string">&quot;./my_final_model.espdl&quot;</span></span><br><span class="line">DEVICE = <span class="string">&quot;cpu&quot;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.model = torch.nn.Sequential(</span><br><span class="line">            torch.nn.Conv2d(in_channels=<span class="number">1</span>, out_channels=<span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            torch.nn.ReLU(),</span><br><span class="line">            torch.nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>),</span><br><span class="line"></span><br><span class="line">            torch.nn.Conv2d(in_channels=<span class="number">16</span>, out_channels=<span class="number">32</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            torch.nn.ReLU(),</span><br><span class="line">            torch.nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>),</span><br><span class="line"></span><br><span class="line">            torch.nn.Conv2d(in_channels=<span class="number">32</span>, out_channels=<span class="number">64</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            torch.nn.ReLU(),</span><br><span class="line"></span><br><span class="line">            torch.nn.Flatten(),</span><br><span class="line">            torch.nn.Linear(in_features=<span class="number">7</span> * <span class="number">6</span> * <span class="number">64</span>, out_features=<span class="number">256</span>),</span><br><span class="line">            torch.nn.ReLU(),</span><br><span class="line">            torch.nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            torch.nn.Linear(in_features=<span class="number">256</span>, out_features=<span class="number">10</span>),</span><br><span class="line">            torch.nn.Softmax(dim=<span class="number">1</span>)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        output = <span class="variable language_">self</span>.model(x)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FeatureOnlyDataset</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, original_dataset</span>):</span><br><span class="line">        <span class="variable language_">self</span>.features = []</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> original_dataset:</span><br><span class="line">            <span class="variable language_">self</span>.features.append(item[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.features)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, idx</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.features[idx]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">collate_fn2</span>(<span class="params">batch</span>):</span><br><span class="line">    features = torch.stack(batch)</span><br><span class="line">    <span class="keyword">return</span> features.to(DEVICE)</span><br><span class="line"></span><br><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.Grayscale(num_output_channels=<span class="number">1</span>),</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.5</span>,), (<span class="number">0.5</span>,)),</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">dataset = datasets.ImageFolder(root=<span class="string">&#x27;/data/dataset/touch_dataset&#x27;</span>, transform=transform)</span><br><span class="line">train_size = <span class="built_in">int</span>(<span class="number">0.8</span> * <span class="built_in">len</span>(dataset))</span><br><span class="line">test_size = <span class="built_in">len</span>(dataset) - train_size</span><br><span class="line">train_dataset, test_dataset = random_split(dataset, [train_size, test_size])</span><br><span class="line"></span><br><span class="line">image = Image.<span class="built_in">open</span>(<span class="string">&quot;/data/dataset/touch_dataset/9/20250225_140331.png&quot;</span>).convert(<span class="string">&#x27;L&#x27;</span>)</span><br><span class="line">input_tensor = transform(image).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">feature_only_test_data = FeatureOnlyDataset(test_dataset)</span><br><span class="line"></span><br><span class="line">testDataLoader = torch.utils.data.DataLoader(dataset=feature_only_test_data, batch_size=<span class="number">32</span>, shuffle=<span class="literal">False</span>,</span><br><span class="line">                                            collate_fn=collate_fn2)</span><br><span class="line"></span><br><span class="line">model = Net().to(DEVICE)</span><br><span class="line">model.load_state_dict(torch.load(<span class="string">&quot;/content/my_final_model.pth&quot;</span>, map_location=DEVICE))</span><br><span class="line">model.<span class="built_in">eval</span>()</span><br><span class="line"></span><br><span class="line">quant_ppq_graph = espdl_quantize_torch(</span><br><span class="line">    model=model,</span><br><span class="line">    espdl_export_file=ESPDL_MODEL_PATH,</span><br><span class="line">    calib_dataloader=testDataLoader,</span><br><span class="line">    calib_steps=<span class="number">8</span>,</span><br><span class="line">    input_shape=[<span class="number">1</span>] + INPUT_SHAPE,</span><br><span class="line">    inputs=[input_tensor],</span><br><span class="line">    target=TARGET,</span><br><span class="line">    num_of_bits=NUM_OF_BITS,</span><br><span class="line">    device=DEVICE,</span><br><span class="line">    error_report=<span class="literal">True</span>,</span><br><span class="line">    skip_export=<span class="literal">False</span>,</span><br><span class="line">    export_test_values=<span class="literal">True</span>,</span><br><span class="line">    verbose=<span class="number">1</span>,</span><br><span class="line">    dispatching_override=<span class="literal">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-Run-the-Quantization-Script-in-the-Python-3-10-Environment"><a href="#9-Run-the-Quantization-Script-in-the-Python-3-10-Environment" class="headerlink" title="9. Run the Quantization Script in the Python 3.10 Environment"></a>9. Run the Quantization Script in the Python 3.10 Environment</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!konda run <span class="string">&quot;python espdl_model_quant.py&quot;</span></span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/jvNjMJh7"><img src="https://i.ibb.co/jvNjMJh7/quantization-finished.png" alt="quantization-finished" border="0"></a></p>
+<h2 id="10-After-Quantization"><a href="#10-After-Quantization" class="headerlink" title="10. After Quantization"></a>10. After Quantization</h2><p>You will get the <code>.onnx</code> model, which you can inspect using Netron.</p>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/Jhv2pYc"><img src="https://i.ibb.co/Jhv2pYc/onnx-viewer.png" alt="onnx-viewer" border="0"></a></p>
+<h2 id="11-Copy-the-espdl-File-to-the-ESP32-S3-Working-Directory"><a href="#11-Copy-the-espdl-File-to-the-ESP32-S3-Working-Directory" class="headerlink" title="11. Copy the .espdl File to the ESP32-S3 Working Directory"></a>11. Copy the <code>.espdl</code> File to the ESP32-S3 Working Directory</h2><p><a target="_blank" rel="noopener" href="https://ibb.co/9Sdpm5j"><img src="https://i.ibb.co/9Sdpm5j/copy-espdl.png" alt="copy-espdl" border="0"></a></p>
+<h2 id="12-Update-CMakeLists-txt-to-Use-the-New-Model"><a href="#12-Update-CMakeLists-txt-to-Use-the-New-Model" class="headerlink" title="12. Update CMakeLists.txt to Use the New Model"></a>12. Update <code>CMakeLists.txt</code> to Use the New Model</h2><p><a target="_blank" rel="noopener" href="https://ibb.co/G4SL1QsP"><img src="https://i.ibb.co/G4SL1QsP/update-cmake-list.png" alt="update-cmake-list" border="0"></a></p>
+<h2 id="13-Build-and-Flash-the-Firmware-Using-Your-Own-Model"><a href="#13-Build-and-Flash-the-Firmware-Using-Your-Own-Model" class="headerlink" title="13. Build and Flash the Firmware Using Your Own Model"></a>13. Build and Flash the Firmware Using Your Own Model</h2><h2 id="14-Success"><a href="#14-Success" class="headerlink" title="14. Success!"></a>14. Success!</h2><p><a target="_blank" rel="noopener" href="https://ibb.co/d4j50MN9"><img src="https://i.ibb.co/d4j50MN9/seems-works.png" alt="seems-works" border="0"></a></p>
+<h1 id="Issue-Summary"><a href="#Issue-Summary" class="headerlink" title="Issue Summary"></a>Issue Summary</h1><ul>
+<li>As of this writing, the <code>esp-dl</code> package requires Python version &lt;&#x3D;3.10. It does not work with Python &gt;3.12.</li>
+<li>When importing the package, use <code>esp_ppq</code> (with an underscore), not <code>esp-ppq</code>.</li>
+<li>Most of the time was spent figuring out how to change the Python version in Google Colab. Using <code>konda</code> to create a virtual environment solved this issue.</li>
+</ul>
+<hr>
+<p><em>In the next post in this series, I will review the model and highlight all the important points about the neural network architecture used in digit recognition.</em></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ESP32-S3/" rel="tag"># ESP32-S3</a>
+              <a href="/tags/ESP-DL/" rel="tag"># ESP-DL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/" rel="prev" title="Learning ESP-DL Series 01: Digi Recognition">
+      <i class="fa fa-chevron-left"></i> Learning ESP-DL Series 01: Digi Recognition
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-This-Blog-May-Help-You"><span class="nav-number">2.</span> <span class="nav-text">How This Blog May Help You</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Prerequisites"><span class="nav-number">3.</span> <span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Development-Environment"><span class="nav-number">4.</span> <span class="nav-text">Development Environment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Building-the-Model-Using-PyTorch-Step-by-Step"><span class="nav-number">5.</span> <span class="nav-text">Building the Model Using PyTorch: Step by Step</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Install-konda-for-the-Virtual-Python-Environment"><span class="nav-number">5.1.</span> <span class="nav-text">1. Install konda for the Virtual Python Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Create-a-Python-3-10-Environment-Using-konda"><span class="nav-number">5.2.</span> <span class="nav-text">2. Create a Python 3.10 Environment Using konda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Download-the-Dataset"><span class="nav-number">5.3.</span> <span class="nav-text">3. Download the Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Prepare-the-Dataset"><span class="nav-number">5.4.</span> <span class="nav-text">4. Prepare the Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Visualize-the-Dataset"><span class="nav-number">5.5.</span> <span class="nav-text">5. Visualize the Dataset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Define-Loss-Function-and-Optimizer"><span class="nav-number">5.6.</span> <span class="nav-text">6. Define Loss Function and Optimizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Training-Process"><span class="nav-number">5.7.</span> <span class="nav-text">7. Training Process</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Quantize-the-Model-Using-esp-ppq"><span class="nav-number">5.8.</span> <span class="nav-text">8. Quantize the Model Using esp-ppq</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Run-the-Quantization-Script-in-the-Python-3-10-Environment"><span class="nav-number">5.9.</span> <span class="nav-text">9. Run the Quantization Script in the Python 3.10 Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-After-Quantization"><span class="nav-number">5.10.</span> <span class="nav-text">10. After Quantization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-Copy-the-espdl-File-to-the-ESP32-S3-Working-Directory"><span class="nav-number">5.11.</span> <span class="nav-text">11. Copy the .espdl File to the ESP32-S3 Working Directory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-Update-CMakeLists-txt-to-Use-the-New-Model"><span class="nav-number">5.12.</span> <span class="nav-text">12. Update CMakeLists.txt to Use the New Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-Build-and-Flash-the-Firmware-Using-Your-Own-Model"><span class="nav-number">5.13.</span> <span class="nav-text">13. Build and Flash the Firmware Using Your Own Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-Success"><span class="nav-number">5.14.</span> <span class="nav-text">14. Success!</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Issue-Summary"><span class="nav-number">6.</span> <span class="nav-text">Issue Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tommok"
+      src="/images/mcu.jpg">
+  <p class="site-author-name" itemprop="name">tommok</p>
+  <div class="site-description" itemprop="description">Small project, small step to success</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tommokmok" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tommokmok" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tommok@gmail.com" title="E-Mail → mailto:tommok@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommok</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+
+</html>
