@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/embedded_32_32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/embedded_16_16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tommokmok.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="IntroductionIn the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:https:&#x2F;&#x2F;githu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning ESP-DL Series 03: Neural Network Architecture">
+<meta property="og:url" content="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/index.html">
+<meta property="og:site_name" content="Embedded Projects">
+<meta property="og:description" content="IntroductionIn the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:https:&#x2F;&#x2F;githu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.ibb.co/mCh8wgV7/mzx-pool-shape-explain.png">
+<meta property="og:image" content="https://i.ibb.co/xSv4vrj2/second-max-pool-shape.png">
+<meta property="og:image" content="https://i.ibb.co/FkKT5MCq/cnn-model-summary.png">
+<meta property="article:published_time" content="2025-08-27T07:58:43.000Z">
+<meta property="article:modified_time" content="2025-09-02T04:20:32.696Z">
+<meta property="article:author" content="tommok">
+<meta property="article:tag" content="ESP-DL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/mCh8wgV7/mzx-pool-shape-explain.png">
+
+<link rel="canonical" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Learning ESP-DL Series 03: Neural Network Architecture | Embedded Projects</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Embedded Projects</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Get busy Liviing</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/mcu.jpg">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Learning ESP-DL Series 03: Neural Network Architecture
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-27 15:58:43" itemprop="dateCreated datePublished" datetime="2025-08-27T15:58:43+08:00">2025-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-02 12:20:32" itemprop="dateModified" datetime="2025-09-02T12:20:32+08:00">2025-09-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>In the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:<br><a target="_blank" rel="noopener" href="https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition">https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition</a></p>
+<p>However, we did not take a closer look at how the neural network itself is designed.</p>
+<p>In this post, I will explain the details of the neural network architecture based on my understanding.</p>
+<p>Later on, I plan to use this model as a foundation to develop my own digit and alphabet character recognition system.</p>
+<h1 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h1><ul>
+<li>Gain a deeper understanding of how the neural network in the ESP-DL digit recognition example works.</li>
+<li>Learn about the structure and parameter calculation of a typical CNN for embedded AI.</li>
+</ul>
+<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
+<li>Basic concepts of how Convolutional Neural Networks (CNNs) work.</li>
+<li>Recommended: Explore <a target="_blank" rel="noopener" href="https://poloclub.github.io/cnn-explainer/">https://poloclub.github.io/cnn-explainer/</a> for interactive CNN explanations.</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Layer-Explanation"><a href="#Layer-Explanation" class="headerlink" title="Layer Explanation"></a>Layer Explanation</h1><p>The model contains 7 main neural network operations:</p>
+<ol>
+<li><strong>Conv2D</strong>: Think of this as a window (kernel) that slides over the input matrix, performing multiplication and summation at each position.</li>
+<li><strong>ReLU</strong>: An activation function that introduces non-linearity.</li>
+<li><strong>MaxPool2D</strong>: A downsampling operation that reduces the spatial dimensions of the matrix.</li>
+<li><strong>Flatten</strong>: Converts a 2D array into a 1D array.</li>
+<li><strong>Linear</strong>: A standard fully connected (dense) neural network layer.</li>
+<li><strong>Dropout</strong>: Randomly sets some weights to zero during training to prevent overfitting.</li>
+<li><strong>Softmax</strong>: Converts raw output values into probabilities.</li>
+</ol>
+<p>The most important part is understanding how data flows from one layer to another. If the shapes do not match, the neural network will not work.</p>
+<h2 id="Conv2D-→-kernel-size"><a href="#Conv2D-→-kernel-size" class="headerlink" title="Conv2D → kernel_size"></a><code>Conv2D</code> → <code>kernel_size</code></h2><ul>
+<li><code>kernel_size</code> is the heart of the CNN. It defines the size of the window (e.g., 3x3) that moves across the input.</li>
+<li>For <code>kernel_size=3</code>, there is a 3x3 matrix of weights that the network learns and optimizes.</li>
+<li>The term “kernel” is standard in CNNs, though “window” might be more intuitive.</li>
+</ul>
+<h2 id="Conv2D-→-in-channels-out-channels"><a href="#Conv2D-→-in-channels-out-channels" class="headerlink" title="Conv2D → in_channels &amp; out_channels"></a><code>Conv2D</code> → <code>in_channels</code> &amp; <code>out_channels</code></h2><ul>
+<li><code>in_channels</code>: Number of input 2D arrays (channels).<br>For grayscale images, this is usually 1; for RGB, it’s 3.</li>
+<li><code>out_channels</code>: Number of output 2D arrays after the convolution.</li>
+<li>For example, <code>in_channels=1</code>, <code>out_channels=16</code> means the Conv2D layer will output 16 feature maps, each generated by a different kernel.</li>
+</ul>
+<h2 id="Conv2D-→-stride-padding"><a href="#Conv2D-→-stride-padding" class="headerlink" title="Conv2D → stride &amp; padding"></a><code>Conv2D</code> → <code>stride</code> &amp; <code>padding</code></h2><ul>
+<li><code>stride</code>: Step size of the kernel as it moves across the input.<br><code>stride=1</code> means the kernel moves one pixel at a time.</li>
+<li><code>padding</code>: Number of zeros (dummy values) added around the border of the input.<br><code>padding=1</code> adds a border of one pixel.</li>
+</ul>
+<h1 id="Output-Shape-of-Each-Layer"><a href="#Output-Shape-of-Each-Layer" class="headerlink" title="Output Shape of Each Layer"></a>Output Shape of Each Layer</h1><blockquote>
+<p><strong>Note:</strong> In PyTorch, tensor shapes are typically defined as <code>[channels, height, width]</code>.</p>
+</blockquote>
+<ul>
+<li><p><strong>Conv2D (in_channels&#x3D;1, out_channels&#x3D;16, kernel_size&#x3D;3, stride&#x3D;1, padding&#x3D;1):</strong></p>
+<ul>
+<li>Input: 25 x 30 (H x W)</li>
+<li>After padding: 27 x 32 (H x W)</li>
+<li>After convolution: 25 x 30 (H x W)</li>
+</ul>
+</li>
+<li><p><strong>MaxPool2D (kernel_size&#x3D;2, stride&#x3D;2):</strong></p>
+<ul>
+<li>Output: 12 x 15 (H x W)</li>
+<li><a target="_blank" rel="noopener" href="https://ibb.co/mCh8wgV7"><img src="https://i.ibb.co/mCh8wgV7/mzx-pool-shape-explain.png" alt="max-pool-shape-explain" border="0"></a></li>
+<li><em>Note: In the vertical direction, the last row may be dropped if it doesn’t fit the pooling window.</em></li>
+</ul>
+</li>
+<li><p><strong>Conv2D (in_channels&#x3D;16, out_channels&#x3D;32, kernel_size&#x3D;3, stride&#x3D;1, padding&#x3D;1):</strong></p>
+<ul>
+<li>Output: 12 x 15 (H x W)</li>
+</ul>
+</li>
+<li><p><strong>MaxPool2D (kernel_size&#x3D;2, stride&#x3D;2):</strong></p>
+<ul>
+<li>Output: 6 x 7 (H x W)</li>
+<li><a target="_blank" rel="noopener" href="https://ibb.co/xSv4vrj2"><img src="https://i.ibb.co/xSv4vrj2/second-max-pool-shape.png" alt="second-max-pool-shape" border="0"></a></li>
+</ul>
+</li>
+<li><p><strong>Conv2D (in_channels&#x3D;32, out_channels&#x3D;64, kernel_size&#x3D;3, stride&#x3D;1, padding&#x3D;1):</strong></p>
+<ul>
+<li>Output: 6 x 7 (H x W), with 64 channels</li>
+</ul>
+</li>
+<li><p><strong>Flatten:</strong></p>
+<ul>
+<li>Output: 1D array of size 1 x 2688 (6 x 7 x 64)</li>
+</ul>
+</li>
+<li><p><strong>Linear (in_features&#x3D;2688, out_features&#x3D;256):</strong></p>
+<ul>
+<li>Output: 1 x 256</li>
+</ul>
+</li>
+<li><p><strong>Final Linear Layer (in_features&#x3D;256, out_features&#x3D;10):</strong></p>
+<ul>
+<li>Output: 1 x 10 (for 10 digit classes)</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Sometimes, the height and width columns may appear swapped in summaries—always double-check your tensor shapes.</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/Gf0SWLN3"><img src="https://i.ibb.co/FkKT5MCq/cnn-model-summary.png" alt="cnn-model-summary" border="0"></a></p>
+<h1 id="Parameter-Calculation"><a href="#Parameter-Calculation" class="headerlink" title="Parameter Calculation"></a>Parameter Calculation</h1><p>Understanding the number of parameters in each layer is fundamental to grasping how CNNs work.</p>
+<ol>
+<li><p><strong>First Conv2D Layer:</strong>  </p>
+<ul>
+<li>Input: 1 channel, Output: 16 channels, Kernel size: 3x3  </li>
+<li>Each output channel has its own 3x3 kernel: 16 x 9 &#x3D; <strong>144</strong> weights  </li>
+<li>Plus 16 bias values: 144 + 16 &#x3D; <strong>160</strong> parameters</li>
+</ul>
+</li>
+<li><p><strong>First MaxPool2D Layer:</strong>  </p>
+<ul>
+<li>No parameters (just a downsampling operation)</li>
+</ul>
+</li>
+<li><p><strong>Second Conv2D Layer:</strong>  </p>
+<ul>
+<li>Input: 16 channels, Output: 32 channels, Kernel size: 3x3  </li>
+<li>16 x 32 x 9 &#x3D; <strong>4608</strong> weights  </li>
+<li>Plus 32 bias values: 4608 + 32 &#x3D; <strong>4640</strong> parameters</li>
+</ul>
+</li>
+<li><p><strong>Third Conv2D Layer:</strong>  </p>
+<ul>
+<li>Input: 32 channels, Output: 64 channels, Kernel size: 3x3  </li>
+<li>32 x 64 x 9 &#x3D; <strong>18432</strong> weights  </li>
+<li>Plus 64 bias values: 18432 + 64 &#x3D; <strong>18496</strong> parameters</li>
+</ul>
+</li>
+<li><p><strong>First Linear Layer:</strong>  </p>
+<ul>
+<li>Input: 2688, Output: 256  </li>
+<li>2688 x 256 &#x3D; <strong>688,128</strong> weights  </li>
+<li>Plus 256 bias values: 688,128 + 256 &#x3D; <strong>688,384</strong> parameters</li>
+</ul>
+</li>
+<li><p><strong>Final Linear Layer:</strong>  </p>
+<ul>
+<li>Input: 256, Output: 10  </li>
+<li>256 x 10 &#x3D; <strong>2560</strong> weights  </li>
+<li>Plus 10 bias values: 2560 + 10 &#x3D; <strong>2570</strong> parameters</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Tip:</strong> The total number of parameters gives you an idea of the model’s complexity and memory requirements.</p>
+</blockquote>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>In this post, I explained how the tensor shapes change through each layer of the CNN and detailed how to calculate the number of parameters in each layer. </p>
+<p>Understanding these fundamentals will help you design and modify your own CNN architectures for embedded AI applications.</p>
+<p>If you grasp these concepts, you are well on your way to building your own custom neural networks for tasks like digit or character recognition on embedded devices.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ESP-DL/" rel="tag"># ESP-DL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/" rel="prev" title="Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment">
+      <i class="fa fa-chevron-left"></i> Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-This-Blog-May-Help-You"><span class="nav-number">2.</span> <span class="nav-text">How This Blog May Help You</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Prerequisites"><span class="nav-number">3.</span> <span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Layer-Explanation"><span class="nav-number">4.</span> <span class="nav-text">Layer Explanation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Conv2D-%E2%86%92-kernel-size"><span class="nav-number">4.1.</span> <span class="nav-text">Conv2D → kernel_size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conv2D-%E2%86%92-in-channels-out-channels"><span class="nav-number">4.2.</span> <span class="nav-text">Conv2D → in_channels &amp; out_channels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conv2D-%E2%86%92-stride-padding"><span class="nav-number">4.3.</span> <span class="nav-text">Conv2D → stride &amp; padding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Output-Shape-of-Each-Layer"><span class="nav-number">5.</span> <span class="nav-text">Output Shape of Each Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parameter-Calculation"><span class="nav-number">6.</span> <span class="nav-text">Parameter Calculation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">7.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="tommok"
+      src="/images/mcu.jpg">
+  <p class="site-author-name" itemprop="name">tommok</p>
+  <div class="site-description" itemprop="description">Small project, small step to success</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tommokmok" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tommokmok" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tommok@gmail.com" title="E-Mail → mailto:tommok@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommok</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+
+</html>

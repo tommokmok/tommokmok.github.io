@@ -154,6 +154,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/mcu.jpg">
+      <meta itemprop="name" content="tommok">
+      <meta itemprop="description" content="Small project, small step to success">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Embedded Projects">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/" class="post-title-link" itemprop="url">Learning ESP-DL Series 03: Neural Network Architecture</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-27 15:58:43" itemprop="dateCreated datePublished" datetime="2025-08-27T15:58:43+08:00">2025-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-02 12:20:32" itemprop="dateModified" datetime="2025-09-02T12:20:32+08:00">2025-09-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>In the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:<br><a target="_blank" rel="noopener" href="https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition">https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition</a></p>
+<p>However, we did not take a closer look at how the neural network itself is designed.</p>
+<p>In this post, I will explain the details of the neural network architecture based on my understanding.</p>
+<p>Later on, I plan to use this model as a foundation to develop my own digit and alphabet character recognition system.</p>
+<h1 id="How-This-Blog-May-Help-You"><a href="#How-This-Blog-May-Help-You" class="headerlink" title="How This Blog May Help You"></a>How This Blog May Help You</h1><ul>
+<li>Gain a deeper understanding of how the neural network in the ESP-DL digit recognition example works.</li>
+<li>Learn about the structure and parameter calculation of a typical CNN for embedded AI.</li>
+</ul>
+<h1 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h1><ul>
+<li>Basic concepts of how Convolutional Neural Networks (CNNs) work.</li>
+<li>Recommended: Explore <a target="_blank" rel="noopener" href="https://poloclub.github.io/cnn-explainer/">https://poloclub.github.io/cnn-explainer/</a> for interactive CNN explanations.</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://tommokmok.github.io/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -251,7 +343,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/" class="post-title-link" itemprop="url">Learning ESP-DL Series 01: Digi Recognition</a>
+            <a href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/" class="post-title-link" itemprop="url">Learning ESP-DL Series 01: Digit Recognition</a>
         </h2>
 
         <div class="post-meta">
@@ -260,10 +352,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-08-18 10:06:03 / Modified: 14:45:01" itemprop="dateCreated datePublished" datetime="2025-08-18T10:06:03+08:00">2025-08-18</time>
+              <time title="Created: 2025-08-18 10:06:03" itemprop="dateCreated datePublished" datetime="2025-08-18T10:06:03+08:00">2025-08-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-27 14:18:23" itemprop="dateModified" datetime="2025-08-27T14:18:23+08:00">2025-08-27</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -805,7 +903,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-27 14:17:10" itemprop="dateModified" datetime="2025-08-27T14:17:10+08:00">2025-08-27</time>
+                <time title="Modified: 2025-08-27 14:18:26" itemprop="dateModified" datetime="2025-08-27T14:18:26+08:00">2025-08-27</time>
               </span>
 
           
@@ -819,7 +917,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="Common-command-on-hexo"><a href="#Common-command-on-hexo" class="headerlink" title="Common command on hexo"></a>Common command on hexo</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo d -g</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <h1 id="Common-command-on-hexo"><a href="#Common-command-on-hexo" class="headerlink" title="Common command on hexo"></a>Common command on hexo</h1><p>Clean and deply the blog</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo d -g</span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -978,7 +1077,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
