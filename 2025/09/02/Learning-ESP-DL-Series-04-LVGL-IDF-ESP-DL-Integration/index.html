@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025 | Embedded Projects</title><meta name="author" content="tommok"><meta name="copyright" content="tommok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="IDF v5.4 &amp; LVGL v9.2 &amp; ESP-DL Integration (2025)IntroductionThis is the final post in my ESP-DL series. My goal is to create a simple LVGL application that utilizes the esp-dl library for digi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025">
+<meta property="og:url" content="https://tommokmok.github.io/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/index.html">
+<meta property="og:site_name" content="Embedded Projects">
+<meta property="og:description" content="IDF v5.4 &amp; LVGL v9.2 &amp; ESP-DL Integration (2025)IntroductionThis is the final post in my ESP-DL series. My goal is to create a simple LVGL application that utilizes the esp-dl library for digi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tommokmok.github.io/img/mcu.jpg">
+<meta property="article:published_time" content="2025-09-02T09:06:25.000Z">
+<meta property="article:modified_time" content="2025-09-11T07:38:58.801Z">
+<meta property="article:author" content="tommok">
+<meta property="article:tag" content="ESP32-S3">
+<meta property="article:tag" content="lvgl">
+<meta property="article:tag" content="ESP-DL">
+<meta property="article:tag" content="IDF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tommokmok.github.io/img/mcu.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025",
+  "url": "https://tommokmok.github.io/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/",
+  "image": "https://tommokmok.github.io/img/mcu.jpg",
+  "datePublished": "2025-09-02T09:06:25.000Z",
+  "dateModified": "2025-09-11T07:38:58.801Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "tommok",
+      "url": "https://tommokmok.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/embedded_32_32.png"><link rel="canonical" href="https://tommokmok.github.io/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: 'ca-pub-7741480347149308',
+  enable_page_level_ads: 'true'
+});</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Embedded Projects</span></a><a class="nav-page-title" href="/"><span class="site-name">Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-09-02T09:06:25.000Z" title="Created 2025-09-02 17:06:25">2025-09-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-09-11T07:38:58.801Z" title="Updated 2025-09-11 15:38:58">2025-09-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/EmbeddedProject/">EmbeddedProject</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="IDF-v5-4-LVGL-v9-2-ESP-DL-Integration-2025"><a href="#IDF-v5-4-LVGL-v9-2-ESP-DL-Integration-2025" class="headerlink" title="IDF v5.4 &amp; LVGL v9.2 &amp; ESP-DL Integration (2025)"></a>IDF v5.4 &amp; LVGL v9.2 &amp; ESP-DL Integration (2025)</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is the final post in my ESP-DL series.</p>
+<p>My goal is to create a simple LVGL application that utilizes the <code>esp-dl</code> library for digit recognition.</p>
+<p>In this blog, I will clearly explain how I implemented the integration and share key lessons learned.</p>
+<h2 id="Project-Core-Values"><a href="#Project-Core-Values" class="headerlink" title="Project Core Values"></a>Project Core Values</h2><ul>
+<li>For learning purposes.</li>
+<li>The implementation is kept simple and straightforward.</li>
+<li>No fancy stuff,  make it work.</li>
+</ul>
+<h2 id="Application-Features"><a href="#Application-Features" class="headerlink" title="Application Features"></a>Application Features</h2><p>This application allows the user to handwrite a digit on the screen. The device then predicts the digit using the ESP-DL library.</p>
+<h2 id="The-Hard-Part"><a href="#The-Hard-Part" class="headerlink" title="The Hard Part"></a>The Hard Part</h2><p>Previously, I created a sketchpad project using the Arduino framework and PlatformIO:<br><a target="_blank" rel="noopener" href="https://github.com/tommokmok/esp32s3_YetAnotherSketchpad">https://github.com/tommokmok/esp32s3_YetAnotherSketchpad</a></p>
+<p>However, ESP-DL requires a higher version of ESP-IDF, so I needed to port the LVGL code to an ESP-IDF-based framework (not PlatformIO).</p>
+<p>There are very few examples of using ESP-DL with the Arduino framework, so the first step was learning how to implement LVGL in ESP-IDF, then integrating it with the ESP-DL digit recognition example.</p>
+<h2 id="Porting-LVGL-to-ESP-IDF"><a href="#Porting-LVGL-to-ESP-IDF" class="headerlink" title="Porting LVGL to ESP-IDF"></a>Porting LVGL to ESP-IDF</h2><p><strong>Hardware specs:</strong></p>
+<ul>
+<li>ESP32-S3 dev board + 2.8” TFT LCD<br>(Purchased from Taobao. More info: <a target="_blank" rel="noopener" href="http://wiki.waaax.cn/boards/ESP32/ESP32-LVGL%E5%BC%80%E5%8F%91%E6%9D%BF.html">ESP32-LVGL开发板</a>)<blockquote>
+<p><strong>Note:</strong> This dev board is not recommended due to hardware issues. It may reset automatically, especially when connected to a PC.</p>
+</blockquote>
+</li>
+<li>ESP32-S3-N8R8 (8MB external RAM and 8MB external SPI flash)</li>
+<li>LCD Driver: ST7789, 320 x 240 pixels (SPI interface)</li>
+<li>Touch Driver: XPT2046 (SPI interface)</li>
+</ul>
+<p>After researching, I found three possible approaches for porting LVGL to ESP-IDF:</p>
+<ol>
+<li><p><strong>Espressif’s official LVGL port:</strong><br><a target="_blank" rel="noopener" href="https://components.espressif.com/components/espressif/esp_lvgl_port/versions/2.6.0/readme">https://components.espressif.com/components/espressif/esp_lvgl_port/versions/2.6.0/readme</a>  </p>
+<ul>
+<li>Up-to-date library with example code.</li>
+<li>Good starting point.</li>
+</ul>
+</li>
+<li><p><strong>LVGL team’s porting example:</strong><br><a target="_blank" rel="noopener" href="https://github.com/lvgl/lv_port_esp32/tree/master">https://github.com/lvgl/lv_port_esp32/tree/master</a>  </p>
+<ul>
+<li>Outdated (LVGL v7, ESP-IDF v4).</li>
+<li>Not recommended for latest ESP-IDF, but useful as a reference.</li>
+</ul>
+</li>
+<li><p><strong>ESP-IDF example:</strong><br><a target="_blank" rel="noopener" href="https://github.com/espressif/esp-idf/tree/v5.5.1/examples/peripherals/lcd/spi_lcd_touch/main">https://github.com/espressif/esp-idf/tree/v5.5.1/examples/peripherals/lcd/spi_lcd_touch/main</a>  </p>
+<ul>
+<li>Up-to-date code.</li>
+<li>Less functionality, simpler than using <code>esp_lvgl_port</code>.</li>
+</ul>
+</li>
+</ol>
+<p>After careful consideration, I chose option 1 for easier porting to the latest LVGL and ESP-IDF versions.</p>
+<p>Based on my previous sketchpad project, I used <code>LVGL v9.2.2</code> and <code>IDF v5.4.2</code>.</p>
+<h2 id="Porting-LVGL-v9-2-2-to-Current-Hardware"><a href="#Porting-LVGL-v9-2-2-to-Current-Hardware" class="headerlink" title="Porting LVGL v9.2.2 to Current Hardware"></a>Porting LVGL v9.2.2 to Current Hardware</h2><h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h3><ul>
+<li>VS Code with the Espressif ESP-IDF extension and <code>IDF v5.4.2</code> installed.</li>
+</ul>
+<p>The porting process was straightforward, and adding the touch driver did not take much time.</p>
+<p>Source code:<br><a target="_blank" rel="noopener" href="https://github.com/tommokmok/esp32s3_lvgl_idf">https://github.com/tommokmok/esp32s3_lvgl_idf</a></p>
+<p>However, I spent some time manually adding calibration code for the touch point positions. For details, please check the repository above.</p>
+<h2 id="Integrating-LVGL-with-ESP-DL-Example-Code"><a href="#Integrating-LVGL-with-ESP-DL-Example-Code" class="headerlink" title="Integrating LVGL with ESP-DL Example Code"></a>Integrating LVGL with ESP-DL Example Code</h2><p>This was the most challenging and time-consuming part.</p>
+<h3 id="Key-Issues-Encountered"><a href="#Key-Issues-Encountered" class="headerlink" title="Key Issues Encountered"></a>Key Issues Encountered</h3><ul>
+<li><strong>Incorrect <code>sdkconfig</code> settings caused ESP32 to hang:</strong>  <ul>
+<li>When the canvas size is too large (e.g., 320x240), LVGL cannot allocate enough memory.</li>
+<li><strong>Solution:</strong> Set <code>CONFIG_LV_USE_CLIB_MALLOC=y</code>. By default, ESP32-S3 uses external PSRAM for allocations &gt;4KB.</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/gLLfCB3R"><img src="https://i.ibb.co/gLLfCB3R/06-guru-meditation-error.png" alt="06-guru-meditation-error" border="0"></a></p>
+<h3 id="Lessons-Learned"><a href="#Lessons-Learned" class="headerlink" title="Lessons Learned"></a>Lessons Learned</h3><ul>
+<li><strong>Enable LVGL logging for development:</strong><br>Without logging, debugging is very difficult because ESP32-S3 may hang without any UART output.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_LV_USE_LOG=y</span><br><span class="line">CONFIG_LV_LOG_LEVEL_INFO=y</span><br><span class="line">CONFIG_LV_LOG_LEVEL=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>In VS Code, configure ESP-IDF to avoid deleting <code>managed_components</code> during a Full Clean:</strong><br>This prevents unnecessary re-downloads and speeds up development.</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/MDLn0hkH"><img src="https://i.ibb.co/MDLn0hkH/05-not-delete-components-full-clean.png" alt="05-not-delete-components-full-clean" border="0"></a></p>
+<ul>
+<li><strong>Color format consistency:</strong><br>The color format set on the LCD driver, LCD display, and LVGL must match. Otherwise, colors will be displayed incorrectly.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Color set on the driver</span></span><br><span class="line">.color_space = EXAMPLE_LCD_COLOR_SPACE,</span><br><span class="line"></span><br><span class="line"><span class="comment">// Color set on the display</span></span><br><span class="line">.color_format = LV_COLOR_FORMAT_RGB565,</span><br><span class="line"></span><br><span class="line"><span class="comment">// Color set on LVGL</span></span><br><span class="line">lv_draw_buf_create(<span class="number">30</span>, <span class="number">25</span>, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Test-Video"><a href="#Test-Video" class="headerlink" title="Test Video"></a>Test Video</h2><p>Watch the demo:<br><a target="_blank" rel="noopener" href="https://youtube.com/shorts/gx1x1HtLqbE?feature=share">https://youtube.com/shorts/gx1x1HtLqbE?feature=share</a></p>
+<p><a target="_blank" rel="noopener" href="https://ibb.co/bMy95SGs"><img src="https://i.ibb.co/bMy95SGs/lvgl-digit-reconigition.jpg" alt="lvgl-digit-reconigition" border="0"></a></p>
+<p>As shown in the video, the accuracy is not ideal, especially for digits <code>3</code>, <code>9</code>, and <code>8</code>.</p>
+<p>This leads to the next step: improving the project. The first thing to try is increasing the input size—30x25 pixels is too small for handwritten digits.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Source code:<br><a target="_blank" rel="noopener" href="https://github.com/tommokmok/esp32s3_lvgl_digit_recongnition">https://github.com/tommokmok/esp32s3_lvgl_digit_recongnition</a></p>
+<p>This is not the final version, but just a starting point.</p>
+<p>Looking back, it seems like a lot of work, but in reality, it was very little outcome which still not perfect.</p>
+<p>It’s similar to an RPG game: before completing the main quest, you need to finish several mini-tasks.<br>You can’t do it in just one big leap.</p>
+<p>It’s time-consuming, but I enjoy the process—especially when things finally work.</p>
+<p>Let’s see how far I can go with these little steps.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://tommokmok.github.io">tommok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://tommokmok.github.io/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/">https://tommokmok.github.io/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ESP32-S3/">ESP32-S3</a><a class="post-meta__tags" href="/tags/lvgl/">lvgl</a><a class="post-meta__tags" href="/tags/ESP-DL/">ESP-DL</a><a class="post-meta__tags" href="/tags/IDF/">IDF</a></div><div class="post-share"><div class="social-share" data-image="/img/mcu.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/" title="Learning ESP-DL Series 03: Neural Network Architecture"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Learning ESP-DL Series 03: Neural Network Architecture</div></div><div class="info-2"><div class="info-item-1">IntroductionIn the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition However, we did not take a closer look at how the neural network itself is designed. In this post, I will explain the details of the neural network architecture based on my understanding. Later on, I plan t...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/07/16/ESP32-S3-lvgl-YetAnotherSketchpad/" title="ESP32-S3 lvgl: YetAnotherSketchpad 2025"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-16</div><div class="info-item-2">ESP32-S3 lvgl: YetAnotherSketchpad 2025</div></div><div class="info-2"><div class="info-item-1">ESP32-S3 Yet Another SketchpadA demo project for ESP32-S3 using LVGL to implement a sketchpad on a 320 x 240 TFT display. This is a sibling project to YetAnotherStockPriceTracker and uses the same hardware. Almost 90% of the code is referenced from lv_100ask_sketchpad, but updated for LVGL v9.2.2 and fixed for compatibility with ESP32-S3. Project Core Values For learning purposes. The implementation is kept simple and straightforward. No fancy stuff,  make it work.  How This Project May Help ...</div></div></div></a><a class="pagination-related" href="/2025/08/15/Learning-ESP-DL-Series-00-First-Impression/" title="Learning ESP-DL Series 2025 - 00: First Impression"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-15</div><div class="info-item-2">Learning ESP-DL Series 2025 - 00: First Impression</div></div><div class="info-2"><div class="info-item-1">IntroductionThis is the first post in a series of blogs that will explore the ESP-DL library in detail. At the time of writing, there is very little information or tutorials available for ESP-DL, especially practical guides on how to use it effectively. The official documentation from Espressif only explains what the library is, but does not clarify why you might need it, how to use it correctly, or provide helpful tips. In this post, I will focus on running an example code from the ESP-DL li...</div></div></div></a><a class="pagination-related" href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/" title="Learning ESP-DL Series 01: Digit Recognition"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-18</div><div class="info-item-2">Learning ESP-DL Series 01: Digit Recognition</div></div><div class="info-2"><div class="info-item-1">IntroductionIn the previous blog, we verified the hardware and development environment. This time, we will go through another interesting example: touchpad-digit-recognition. This is an ESP AI example that demonstrates the complete deep learning development workflow, from data collection and training to device deployment. In this blog, I will clone this example and run the code on my own hardware, which does not have a touch sensor. How This Blog May Help You Learn ESP-DL in detail. If you wa...</div></div></div></a><a class="pagination-related" href="/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/" title="Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-27</div><div class="info-item-2">Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment</div></div><div class="info-2"><div class="info-item-1">IntroductionIn the previous blog, we updated the example code to be compatible with a general ESP32-S3 dev kit module. One issue with the ESP-DL digit recognition example is that they do not provide the original PyTorch model or the output files generated after the esp-ppq process. Only the final .espdl file is provided. Therefore, we need to build our own model based on their dataset. Fortunately, Espressif provides the code for training, testing, and quantizing the model. In this post, I wi...</div></div></div></a><a class="pagination-related" href="/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/" title="Learning ESP-DL Series 03: Neural Network Architecture"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-27</div><div class="info-item-2">Learning ESP-DL Series 03: Neural Network Architecture</div></div><div class="info-2"><div class="info-item-1">IntroductionIn the previous blog, we walked through how to prepare the dataset, train, quantize, and deploy the model to the ESP32-S3, following the ESP-DL digit recognition example code:https://github.com/espressif/esp-iot-solution/tree/master/examples/ai/esp_dl/touchpad_digit_recognition However, we did not take a closer look at how the neural network itself is designed. In this post, I will explain the details of the neural network architecture based on my understanding. Later on, I plan t...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/mcu.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">tommok</div><div class="author-info-description">Small project, small step to success</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tommokmok"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Get busy living or get busy dying. -- Stephen King</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IDF-v5-4-LVGL-v9-2-ESP-DL-Integration-2025"><span class="toc-number">1.</span> <span class="toc-text">IDF v5.4 &amp; LVGL v9.2 &amp; ESP-DL Integration (2025)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-Core-Values"><span class="toc-number">1.2.</span> <span class="toc-text">Project Core Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-Features"><span class="toc-number">1.3.</span> <span class="toc-text">Application Features</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Hard-Part"><span class="toc-number">1.4.</span> <span class="toc-text">The Hard Part</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Porting-LVGL-to-ESP-IDF"><span class="toc-number">1.5.</span> <span class="toc-text">Porting LVGL to ESP-IDF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Porting-LVGL-v9-2-2-to-Current-Hardware"><span class="toc-number">1.6.</span> <span class="toc-text">Porting LVGL v9.2.2 to Current Hardware</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Prerequisites"><span class="toc-number">1.6.1.</span> <span class="toc-text">Prerequisites</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Integrating-LVGL-with-ESP-DL-Example-Code"><span class="toc-number">1.7.</span> <span class="toc-text">Integrating LVGL with ESP-DL Example Code</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-Issues-Encountered"><span class="toc-number">1.7.1.</span> <span class="toc-text">Key Issues Encountered</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lessons-Learned"><span class="toc-number">1.7.2.</span> <span class="toc-text">Lessons Learned</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-Video"><span class="toc-number">1.8.</span> <span class="toc-text">Test Video</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.9.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/02/Learning-ESP-DL-Series-04-LVGL-IDF-ESP-DL-Integration/" title="Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025">Learning ESP-DL Series 04- LVGL, IDF, and ESP-DL Integration 2025</a><time datetime="2025-09-02T09:06:25.000Z" title="Created 2025-09-02 17:06:25">2025-09-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/Learning-ESP-DL-Series-03-Neural-Network-Architecture/" title="Learning ESP-DL Series 03: Neural Network Architecture">Learning ESP-DL Series 03: Neural Network Architecture</a><time datetime="2025-08-27T07:58:43.000Z" title="Created 2025-08-27 15:58:43">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/Learning-ESP-DL-Series-02-Walkthrough-on-training-test-deploy/" title="Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment">Learning ESP-DL Series 02: Walkthrough on Training, Testing, and Deployment</a><time datetime="2025-08-27T00:48:57.000Z" title="Created 2025-08-27 08:48:57">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/18/Learning-ESP-DL-Series-01-Digi-Recognition/" title="Learning ESP-DL Series 01: Digit Recognition">Learning ESP-DL Series 01: Digit Recognition</a><time datetime="2025-08-18T02:06:03.000Z" title="Created 2025-08-18 10:06:03">2025-08-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/15/Learning-ESP-DL-Series-00-First-Impression/" title="Learning ESP-DL Series 2025 - 00: First Impression">Learning ESP-DL Series 2025 - 00: First Impression</a><time datetime="2025-08-15T05:30:25.000Z" title="Created 2025-08-15 13:30:25">2025-08-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By tommok</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
